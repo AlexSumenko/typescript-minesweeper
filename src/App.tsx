@@ -3,9 +3,10 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import Header from './ui/components/Header/Header';
 import HomePage from './ui/containers/HomePage/HomePage';
 import Footer from './ui/components/Footer/Footer';
-import Leaderboard from './ui/containers/Leaderboard/Leaderboard';
-import PlayingField from './ui/containers/PlayingField/PlayingField';
+import LeaderBoard from './ui/containers/LeaderboardPage/LeaderboardPage';
+import GameBoard from './ui/containers/GameBoardPage/GameBoardPage';
 
+import { Routes } from './models/minesweeper';
 import './App.scss';
 
 const App: FC = (): ReactElement => {
@@ -14,10 +15,10 @@ const App: FC = (): ReactElement => {
       <Header />
       <main>
         <Switch>
-          <Route path="/" exact component={HomePage} />
-          <Route path="/playing-field" exact component={PlayingField} />
-          <Route path="/leaderboard" exact component={Leaderboard} />
-          <Redirect to="/" />
+          <Route path={Routes.HomePage} exact component={HomePage} />
+          <Route path={Routes.GameBoard} exact component={GameBoard} />
+          <Route path={Routes.LeaderBoard} exact component={LeaderBoard} />
+          <Redirect to={Routes.HomePage} />
         </Switch>
       </main>
       <Footer />

@@ -1,0 +1,1 @@
+export { savePlayingFieldToStore } from './minesweeper';
