@@ -13,3 +13,7 @@ export interface IPlayFieldState {
   playField: PlayFieldArray;
   playFieldSize: number;
 }
+
+export interface IAppState {
+  msw: IPlayFieldState;
+}

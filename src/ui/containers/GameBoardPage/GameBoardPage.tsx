@@ -3,11 +3,13 @@ import { connect } from 'react-redux';
 import PlayField from '../../components/PlayField/PlayField';
 import { savePlayingFieldToStore } from '../../../store/actions';
 import { PlayFieldArray } from '../../../models/minesweeper';
-import { ISavePlayingFieldToStoreAction } from '../../../models/storeActions';
+import {
+  IAppState,
+  ISavePlayingFieldToStoreAction,
+} from '../../../models/storeActions';
+import MinesweeperField from '../../../models/MinesweeperField';
 
 import './GameBoardPage.scss';
-import { generatePlayingFieldSkeleton } from '../../../utils/playingField';
-
 interface GameBoardProps {
   playFieldSize: number;
   savePlayingFieldToStore: (
@@ -20,7 +22,8 @@ const GameBoard: FC<GameBoardProps> = ({
   savePlayingFieldToStore,
 }): ReactElement => {
   useEffect(() => {
-    const playField = generatePlayingFieldSkeleton(playFieldSize);
+    const game = new MinesweeperField(playFieldSize);
+    const playField = game.playField;
     savePlayingFieldToStore(playField);
   });
 
@@ -38,7 +41,7 @@ const GameBoard: FC<GameBoardProps> = ({
   );
 };
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: IAppState) => {
   return {
     playFieldSize: state.msw.playFieldSize,
   };

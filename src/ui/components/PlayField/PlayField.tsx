@@ -1,6 +1,7 @@
 import { FC, ReactElement } from 'react';
 import { connect } from 'react-redux';
 import { IPlayingCell, PlayFieldArray } from '../../../models/minesweeper';
+import { IAppState } from '../../../models/storeActions';
 import PlayingCell from '../PlayingCell/PlayingCell';
 
 import './PlayField.scss';
@@ -18,16 +19,18 @@ const PlayField: FC<PlayFieldProps | null> = ({
     <div
       className="play-field"
       style={{
-        gridTemplateColumns: `repeat(${playFieldSize}, auto)`,
-        gridTemplateRows: `repeat(${playFieldSize}, auto)`,
+        gridTemplateColumns: `repeat(${playFieldSize}, ${
+          320 / playFieldSize
+        }px)`,
+        gridTemplateRows: `repeat(${playFieldSize}, ${320 / playFieldSize}px)`,
       }}
     >
       {playFieldProp && playFieldProp.length > 0
-        ? playFieldProp.map((rowEl: IPlayingCell[]) =>
-            rowEl.map((el: IPlayingCell) => (
+        ? playFieldProp.map((rowEl: IPlayingCell[], rowElId: number) =>
+            rowEl.map((el: IPlayingCell, elId: number) => (
               <PlayingCell
-                key={el.x.toString() + el.y.toString()}
-                number={el.x.toString() + el.y.toString()}
+                key={rowElId.toString() + elId.toString()}
+                value={el.value}
               />
             ))
           )
@@ -38,7 +41,7 @@ const PlayField: FC<PlayFieldProps | null> = ({
   return <>{playField}</>;
 };
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: IAppState) => {
   return {
     playFieldProp: state.msw.playField,
     playFieldSize: state.msw.playFieldSize,

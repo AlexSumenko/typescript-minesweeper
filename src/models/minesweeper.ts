@@ -9,11 +9,9 @@ export enum Locales {
   RU = 'RU',
 }
 
-export type PlayingCellValue = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 'mine' | null;
+export type PlayingCellValue = null | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 'mine';
 
 export interface IPlayingCell {
-  x: number;
-  y: number;
   value: PlayingCellValue;
   isOpened: boolean;
 }
