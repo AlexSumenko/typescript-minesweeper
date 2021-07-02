@@ -1,1 +1,1 @@
-export { savePlayingFieldToStore } from './minesweeper';
+export { savePlayingFieldToStore, setCellOpen, startGame } from './minesweeper';

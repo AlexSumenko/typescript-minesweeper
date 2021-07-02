@@ -1,8 +1,9 @@
 .playing-cell {
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bold;
   cursor: default;
   border: 1px solid black;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Courier New', Courier, monospace;
 }

@@ -1,31 +1,56 @@
-import { FC, ReactElement, useState } from 'react';
-import { PlayingCellValue } from '../../../models/minesweeper';
+import { FC, ReactElement } from 'react';
+import { connect } from 'react-redux';
+import { CellPosition, PlayingCellValue } from '../../../models/minesweeper';
+import { ISetCellOpenAction } from '../../../models/storeActions';
+import { setCellOpen } from '../../../store/actions';
 
 import './PlayingCell.scss';
 
 interface PlayingCellProps {
   value: PlayingCellValue;
+  opened: boolean;
+  clicked: () => void;
 }
 
-const PlayingCell: FC<PlayingCellProps> = ({ value }): ReactElement => {
+const PlayingCell: FC<PlayingCellProps> = ({
+  value,
+  opened,
+  clicked,
+}): ReactElement => {
   const closedShadow = 'inset -6px -8px 5px -6px #000000';
   const openedShadow = 'inset 6px 9px 5px -6px #000000';
-
-  const [cellOpen, setCellOpen] = useState(false);
-
-  const onCellClick = () => {
-    setCellOpen(true);
+  const colorMap = {
+    0: 'white',
+    1: 'blue',
+    2: 'green',
+    3: 'red',
+    4: 'purple',
+    5: 'orange',
+    6: 'brown',
+    7: 'grey',
+    8: 'darkred',
+    mine: 'black',
   };
 
   return (
     <div
       className="playing-cell"
-      style={{ boxShadow: `${cellOpen ? openedShadow : closedShadow}` }}
-      onClick={onCellClick}
+      style={{
+        boxShadow: `${opened ? openedShadow : closedShadow}`,
+        color: `${colorMap[value]}`,
+        backgroundColor: `${opened && value === 'mine' ? 'red' : 'white'}`,
+      }}
+      onClick={() => clicked()}
     >
-      <span>{cellOpen && value}</span>
+      <span>{opened && value}</span>
     </div>
   );
 };
 
-export default PlayingCell;
+const dispatchStateToProps = (dispatch: any) => {
+  return {
+    setCellOpen: ([x, y]: CellPosition) => dispatch(setCellOpen([x, y])),
+  };
+};
+
+export default connect(null, dispatchStateToProps)(PlayingCell);

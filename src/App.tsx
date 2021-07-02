@@ -15,10 +15,10 @@ const App: FC = (): ReactElement => {
       <Header />
       <main>
         <Switch>
-          <Route path={Routes.HomePage} exact component={HomePage} />
-          <Route path={Routes.GameBoard} exact component={GameBoard} />
-          <Route path={Routes.LeaderBoard} exact component={LeaderBoard} />
-          <Redirect to={Routes.HomePage} />
+          <Route path={Routes.HOME_PAGE} exact component={HomePage} />
+          <Route path={Routes.GAME_BOARD} exact component={GameBoard} />
+          <Route path={Routes.LEADER_BOARD} exact component={LeaderBoard} />
+          <Redirect to={Routes.HOME_PAGE} />
         </Switch>
       </main>
       <Footer />

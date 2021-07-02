@@ -1,10 +1,9 @@
 import { IPlayingCell, PlayFieldArray } from './minesweeper';
-
-type MinePosition = [number, number];
+import { CellPosition } from './minesweeper';
 
 class MinesweeperField {
   public playField: PlayFieldArray = [];
-  private minePositions: MinePosition[] = [];
+  private minePositions: CellPosition[] = [];
   private playFieldSize: number;
 
   constructor(playFieldSize: number) {
@@ -22,7 +21,7 @@ class MinesweeperField {
     for (let x = 0; x < this.playFieldSize; x++) {
       let row: IPlayingCell[] = [];
       for (let y = 0; y < this.playFieldSize; y++) {
-        row.push({ value: null, isOpened: false });
+        row.push({ value: 0, isOpened: false });
       }
       this.playField.push(row);
       row = [];
@@ -45,14 +44,14 @@ class MinesweeperField {
     return this.minePositions.length === this.playFieldSize ? true : false;
   };
 
-  private isExistingMinePosition = (minePosition: MinePosition): boolean => {
+  private isExistingMinePosition = (minePosition: CellPosition): boolean => {
     return !!this.minePositions.find(
-      (minePos: MinePosition) =>
+      (minePos: CellPosition) =>
         minePos[0] === minePosition[0] && minePos[1] === minePosition[1]
     );
   };
 
-  private generateRandomPosition = (): MinePosition => {
+  private generateRandomPosition = (): CellPosition => {
     return [
       Math.floor(Math.random() * this.playFieldSize),
       Math.floor(Math.random() * this.playFieldSize),
@@ -65,8 +64,8 @@ class MinesweeperField {
     }
   };
 
-  private incrementAdjacentCounts = (minePosition: MinePosition): void => {
-    const [x, y]: MinePosition = minePosition;
+  private incrementAdjacentCounts = (minePosition: CellPosition): void => {
+    const [x, y]: CellPosition = minePosition;
     if (x !== 0 && y !== 0 && this.playField[x - 1][y - 1].value !== 'mine') {
       (this.playField[x - 1][y - 1].value as number)++;
     }

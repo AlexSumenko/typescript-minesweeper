@@ -1,7 +1,18 @@
 import { FC, ReactElement } from 'react';
 import { connect } from 'react-redux';
-import { IPlayingCell, PlayFieldArray } from '../../../models/minesweeper';
-import { IAppState } from '../../../models/storeActions';
+import {
+  CellPosition,
+  GameState,
+  GameStates,
+  IPlayingCell,
+  PlayFieldArray,
+} from '../../../models/minesweeper';
+import {
+  IAppState,
+  ISetCellOpenAction,
+  IStartGameAction,
+} from '../../../models/storeActions';
+import { setCellOpen, startGame } from '../../../store/actions';
 import PlayingCell from '../PlayingCell/PlayingCell';
 
 import './PlayField.scss';
@@ -9,12 +20,107 @@ import './PlayField.scss';
 interface PlayFieldProps {
   playFieldProp: PlayFieldArray;
   playFieldSize: number;
+  gameState: GameState;
+  setCellOpen: ([x, y]: CellPosition) => ISetCellOpenAction;
+  startGame: () => IStartGameAction;
 }
 
 const PlayField: FC<PlayFieldProps | null> = ({
   playFieldProp,
   playFieldSize,
+  gameState,
+  setCellOpen,
+  startGame,
 }): ReactElement => {
+  const onCellClick = ([x, y]: CellPosition): void => {
+    if (
+      gameState === GameStates.NOT_STARTED ||
+      gameState === GameStates.PAUSED
+    ) {
+      startGame();
+    }
+    openSafeCells([x, y]);
+  };
+
+  const openSafeCells = ([x, y]: CellPosition): void => {
+    console.log([x, y]);
+    if (playFieldProp[x][y].isOpened) {
+      return;
+    }
+    setCellOpen([x, y]);
+    if (playFieldProp[x][y].value !== 0) {
+      return;
+    }
+    if (
+      x !== 0 &&
+      y !== 0 &&
+      playFieldProp[x - 1][y - 1].value !== 'mine' &&
+      !playFieldProp[x - 1][y - 1].value
+    ) {
+      // setCellOpen([x - 1, y - 1]);
+      openSafeCells([x - 1, y - 1]);
+    }
+    // if (
+    //   x !== 0 &&
+    //   playFieldProp[x - 1][y].value !== 'mine' &&
+    //   !playFieldProp[x - 1][y].value
+    // ) {
+    //   // setCellOpen([x - 1, y]);
+    //   openSafeCells([x - 1, y]);
+    // }
+    // if (
+    //   x !== 0 &&
+    //   y !== playFieldSize - 1 &&
+    //   playFieldProp[x - 1][y + 1].value !== 'mine' &&
+    //   !playFieldProp[x - 1][y + 1].value
+    // ) {
+    //   // setCellOpen([x - 1, y + 1]);
+    //   openSafeCells([x - 1, y + 1]);
+    // }
+    // if (
+    //   y !== 0 &&
+    //   playFieldProp[x][y - 1].value !== 'mine' &&
+    //   !playFieldProp[x][y - 1].value
+    // ) {
+    //   // setCellOpen([x, y - 1]);
+    //   openSafeCells([x, y - 1]);
+    // }
+    // if (
+    //   y !== playFieldSize - 1 &&
+    //   playFieldProp[x][y + 1].value !== 'mine' &&
+    //   !playFieldProp[x][y + 1].value
+    // ) {
+    //   // setCellOpen([x, y + 1]);
+    //   openSafeCells([x, y + 1]);
+    // }
+    // if (
+    //   x !== playFieldSize - 1 &&
+    //   y !== 0 &&
+    //   playFieldProp[x + 1][y - 1].value !== 'mine' &&
+    //   !playFieldProp[x + 1][y - 1].value
+    // ) {
+    //   // setCellOpen([x + 1, y - 1]);
+    //   openSafeCells([x + 1, y - 1]);
+    // }
+    // if (
+    //   x !== playFieldSize - 1 &&
+    //   playFieldProp[x + 1][y].value !== 'mine' &&
+    //   !playFieldProp[x + 1][y].value
+    // ) {
+    //   // setCellOpen([x + 1, y]);
+    //   openSafeCells([x + 1, y]);
+    // }
+    // if (
+    //   x !== playFieldSize - 1 &&
+    //   y !== playFieldSize - 1 &&
+    //   playFieldProp[x + 1][y + 1].value !== 'mine' &&
+    //   !playFieldProp[x + 1][y + 1].value
+    // ) {
+    //   // setCellOpen([x + 1, y + 1]);
+    //   openSafeCells([x + 1, y + 1]);
+    // }
+  };
+
   const playField = (
     <div
       className="play-field"
@@ -31,6 +137,8 @@ const PlayField: FC<PlayFieldProps | null> = ({
               <PlayingCell
                 key={rowElId.toString() + elId.toString()}
                 value={el.value}
+                opened={el.isOpened}
+                clicked={() => onCellClick([rowElId, elId])}
               />
             ))
           )
@@ -45,7 +153,15 @@ const mapStateToProps = (state: IAppState) => {
   return {
     playFieldProp: state.msw.playField,
     playFieldSize: state.msw.playFieldSize,
+    gameState: state.msw.gameState,
   };
 };
 
-export default connect(mapStateToProps)(PlayField);
+const dispatchStateToProps = (dispatch: any) => {
+  return {
+    setCellOpen: ([x, y]: CellPosition) => dispatch(setCellOpen([x, y])),
+    startGame: () => dispatch(startGame()),
+  };
+};
+
+export default connect(mapStateToProps, dispatchStateToProps)(PlayField);
