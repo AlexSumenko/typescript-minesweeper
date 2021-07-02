@@ -2,7 +2,7 @@ import { FC, ReactElement, useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import Counter from '../../components/Counter/Counter';
 import GameControl from '../../components/GameControl/GameControl';
-import PauseOverlay from '../../components/PauseOverlay/PauseOverlay';
+import Overlay from '../../components/Overlay/Overlay';
 import PlayField from '../../components/PlayField/PlayField';
 import {
   changeGameState,
@@ -64,14 +64,14 @@ const GameBoard: FC<GameBoardProps> = ({
     };
   }, [gameState, counter]);
 
-  const onPlayFieldClick = (): void => {
-    if (
-      gameState === GameStates.NOT_STARTED ||
-      gameState === GameStates.PAUSED
-    ) {
-      changeGameState(GameStates.IN_PROGRESS);
-    }
-  };
+  // const onPlayFieldClick = (): void => {
+  //   if (
+  //     gameState === GameStates.NOT_STARTED ||
+  //     gameState === GameStates.PAUSED
+  //   ) {
+  //     changeGameState(GameStates.IN_PROGRESS);
+  //   }
+  // };
 
   const onGamePlayPauseClick = (): void => {
     changeGameState(
@@ -88,7 +88,12 @@ const GameBoard: FC<GameBoardProps> = ({
 
   return (
     <div className="game-board">
-      <PauseOverlay clicked={onGamePlayPauseClick} />
+      {gameState === GameStates.PAUSED && (
+        <Overlay
+          content="Game is paused, click here to resume"
+          clicked={onGamePlayPauseClick}
+        />
+      )}
       <div className="game-board__top-row">
         <div className="game-board__timer">
           <Counter value={minesLeft} heading="Mines left:" />
@@ -102,7 +107,15 @@ const GameBoard: FC<GameBoardProps> = ({
         </div>
       </div>
       <div className="play-container">
-        <PlayField clicked={onPlayFieldClick} />
+        {gameState === GameStates.WON && (
+          <Overlay
+            content="Congratulations you won the game. Click the restart button"
+            clicked={() => {
+              return;
+            }}
+          />
+        )}
+        <PlayField />
       </div>
     </div>
   );

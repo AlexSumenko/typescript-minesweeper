@@ -1,13 +1,10 @@
-import {
-  GameStates,
-  IPlayingCell,
-  PlayFieldArray,
-} from '../../models/minesweeper';
+import { GameStates, PlayFieldArray } from '../../models/minesweeper';
 import {
   ActionTypes,
   MinesweeperActions,
   IPlayFieldState,
 } from '../../models/storeActions';
+import { deepClonePlayFieldArray } from '../../utils/helpers';
 
 const initialState: IPlayFieldState = {
   playField: [],
@@ -25,11 +22,8 @@ const reducer = (
       return { ...state, playField: action.payload };
     case ActionTypes.SET_CELL_OPEN:
       const [x, y] = action.payload;
-      const newPlayField: PlayFieldArray = state.playField.map(
-        (row: IPlayingCell[]): IPlayingCell[] =>
-          row.map((rowEl: IPlayingCell): IPlayingCell => {
-            return { ...rowEl };
-          })
+      const newPlayField: PlayFieldArray = deepClonePlayFieldArray(
+        state.playField
       );
       newPlayField[x][y].isOpened = true;
       return { ...state, playField: newPlayField };
