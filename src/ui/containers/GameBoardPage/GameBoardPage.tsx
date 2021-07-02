@@ -1,4 +1,4 @@
-import { FC, ReactElement, useEffect } from 'react';
+import { FC, ReactElement, useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import Counter from '../../components/Counter/Counter';
 import GameControl from '../../components/GameControl/GameControl';
@@ -19,6 +19,7 @@ import {
   ISavePlayingFieldToStoreAction,
 } from '../../../models/storeActions';
 import MinesweeperField from '../../../models/MinesweeperField';
+import { timeFormatter } from '../../../utils/helpers';
 
 import './GameBoardPage.scss';
 interface GameBoardProps {
@@ -38,6 +39,12 @@ const GameBoard: FC<GameBoardProps> = ({
   savePlayingFieldToStore,
   changeGameState,
 }): ReactElement => {
+  const [clock, setClock] = useState<number>(0);
+
+  const counter = useCallback(() => {
+    setClock(clock + 1);
+  }, [clock]);
+
   useEffect(() => {
     if (gameState !== GameStates.NOT_STARTED) {
       return;
@@ -45,8 +52,26 @@ const GameBoard: FC<GameBoardProps> = ({
     const game = new MinesweeperField(playFieldSize);
     const playField = game.playField;
     savePlayingFieldToStore(playField);
-    console.log('GAME STARTED');
-  }, [gameState]);
+  }, [gameState, playFieldSize, savePlayingFieldToStore]);
+
+  useEffect(() => {
+    if (gameState !== GameStates.IN_PROGRESS) {
+      return;
+    }
+    const timerId = setTimeout(counter, 1000);
+    return () => {
+      clearTimeout(timerId);
+    };
+  }, [gameState, counter]);
+
+  const onPlayFieldClick = (): void => {
+    if (
+      gameState === GameStates.NOT_STARTED ||
+      gameState === GameStates.PAUSED
+    ) {
+      changeGameState(GameStates.IN_PROGRESS);
+    }
+  };
 
   const onGamePlayPauseClick = (): void => {
     changeGameState(
@@ -58,6 +83,7 @@ const GameBoard: FC<GameBoardProps> = ({
 
   const onRestartClick = (): void => {
     changeGameState(GameStates.NOT_STARTED);
+    setClock(0);
   };
 
   return (
@@ -72,11 +98,11 @@ const GameBoard: FC<GameBoardProps> = ({
           <GameControl value={'\u21BA'} clicked={onRestartClick} />
         </div>
         <div className="game-board__mines-left">
-          <Counter value={123} heading="Time spent:" />
+          <Counter value={timeFormatter(clock)} heading="Time spent:" />
         </div>
       </div>
       <div className="play-container">
-        <PlayField />
+        <PlayField clicked={onPlayFieldClick} />
       </div>
     </div>
   );

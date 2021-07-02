@@ -3,7 +3,7 @@ import { FC, ReactElement } from 'react';
 import './Counter.scss';
 
 interface CounterProps {
-  value: number;
+  value: number | string;
   heading?: string;
 }
 

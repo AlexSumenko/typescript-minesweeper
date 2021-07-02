@@ -7,11 +7,7 @@ import {
   IPlayingCell,
   PlayFieldArray,
 } from '../../../models/minesweeper';
-import {
-  IAppState,
-  ISetCellOpenAction,
-  IChangeGameStateAction,
-} from '../../../models/storeActions';
+import { IAppState, ISetCellOpenAction } from '../../../models/storeActions';
 import { setCellOpen, changeGameState } from '../../../store/actions';
 import PlayingCell from '../PlayingCell/PlayingCell';
 
@@ -21,8 +17,8 @@ interface PlayFieldProps {
   playFieldProp: PlayFieldArray;
   playFieldSize: number;
   gameState: GameState;
+  clicked: () => void;
   setCellOpen: ([x, y]: CellPosition) => ISetCellOpenAction;
-  startGame: (gameState: GameState) => IChangeGameStateAction;
 }
 
 const PlayField: FC<PlayFieldProps | null> = ({
@@ -30,15 +26,10 @@ const PlayField: FC<PlayFieldProps | null> = ({
   playFieldSize,
   gameState,
   setCellOpen,
-  startGame,
+  clicked,
 }): ReactElement => {
   const onCellClick = ([x, y]: CellPosition): void => {
-    if (
-      gameState === GameStates.NOT_STARTED ||
-      gameState === GameStates.PAUSED
-    ) {
-      startGame(GameStates.IN_PROGRESS);
-    }
+    clicked();
     openSafeCells([x, y]);
   };
 
