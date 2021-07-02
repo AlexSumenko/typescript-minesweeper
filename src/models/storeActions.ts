@@ -3,7 +3,7 @@ import { CellPosition, GameState, PlayFieldArray } from './minesweeper';
 export enum ActionTypes {
   SAVE_PLAY_FIELD_TO_STORE = 'SAVE_PLAY_FIELD_TO_STORE',
   SET_CELL_OPEN = 'SET_CELL_OPEN',
-  START_GAME = 'START_GAME',
+  CHANGE_GAME_STATE = 'CHANGE_GAME_STATE',
 }
 
 export interface ISavePlayingFieldToStoreAction {
@@ -16,14 +16,15 @@ export interface ISetCellOpenAction {
   payload: CellPosition;
 }
 
-export interface IStartGameAction {
-  type: typeof ActionTypes.START_GAME;
+export interface IChangeGameStateAction {
+  type: typeof ActionTypes.CHANGE_GAME_STATE;
+  payload: GameState;
 }
 
 export type MinesweeperActions =
   | ISavePlayingFieldToStoreAction
   | ISetCellOpenAction
-  | IStartGameAction;
+  | IChangeGameStateAction;
 
 export interface IPlayFieldState {
   playField: PlayFieldArray;

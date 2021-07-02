@@ -1,7 +1,6 @@
 import { FC, ReactElement } from 'react';
 import { connect } from 'react-redux';
 import { CellPosition, PlayingCellValue } from '../../../models/minesweeper';
-import { ISetCellOpenAction } from '../../../models/storeActions';
 import { setCellOpen } from '../../../store/actions';
 
 import './PlayingCell.scss';
@@ -37,10 +36,10 @@ const PlayingCell: FC<PlayingCellProps> = ({
       className="playing-cell"
       style={{
         boxShadow: `${opened ? openedShadow : closedShadow}`,
-        color: `${colorMap[value]}`,
+        color: `${value === null ? colorMap['0'] : colorMap[value]}`,
         backgroundColor: `${opened && value === 'mine' ? 'red' : 'white'}`,
       }}
-      onClick={() => clicked()}
+      onClick={clicked}
     >
       <span>{opened && value}</span>
     </div>

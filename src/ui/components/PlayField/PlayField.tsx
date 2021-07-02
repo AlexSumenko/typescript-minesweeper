@@ -10,9 +10,9 @@ import {
 import {
   IAppState,
   ISetCellOpenAction,
-  IStartGameAction,
+  IChangeGameStateAction,
 } from '../../../models/storeActions';
-import { setCellOpen, startGame } from '../../../store/actions';
+import { setCellOpen, changeGameState } from '../../../store/actions';
 import PlayingCell from '../PlayingCell/PlayingCell';
 
 import './PlayField.scss';
@@ -22,7 +22,7 @@ interface PlayFieldProps {
   playFieldSize: number;
   gameState: GameState;
   setCellOpen: ([x, y]: CellPosition) => ISetCellOpenAction;
-  startGame: () => IStartGameAction;
+  startGame: (gameState: GameState) => IChangeGameStateAction;
 }
 
 const PlayField: FC<PlayFieldProps | null> = ({
@@ -37,7 +37,7 @@ const PlayField: FC<PlayFieldProps | null> = ({
       gameState === GameStates.NOT_STARTED ||
       gameState === GameStates.PAUSED
     ) {
-      startGame();
+      startGame(GameStates.IN_PROGRESS);
     }
     openSafeCells([x, y]);
   };
@@ -48,7 +48,7 @@ const PlayField: FC<PlayFieldProps | null> = ({
       return;
     }
     setCellOpen([x, y]);
-    if (playFieldProp[x][y].value !== 0) {
+    if (playFieldProp[x][y].value !== null) {
       return;
     }
     if (
@@ -160,7 +160,7 @@ const mapStateToProps = (state: IAppState) => {
 const dispatchStateToProps = (dispatch: any) => {
   return {
     setCellOpen: ([x, y]: CellPosition) => dispatch(setCellOpen([x, y])),
-    startGame: () => dispatch(startGame()),
+    startGame: (gameState: GameStates) => dispatch(changeGameState(gameState)),
   };
 };
 

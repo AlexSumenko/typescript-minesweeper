@@ -33,9 +33,8 @@ const reducer = (
       );
       newPlayField[x][y].isOpened = true;
       return { ...state, playField: newPlayField };
-    case ActionTypes.START_GAME:
-      console.log('GAME STARTED');
-      return { ...state, gameState: GameStates.IN_PROGRESS };
+    case ActionTypes.CHANGE_GAME_STATE:
+      return { ...state, gameState: action.payload };
     default:
       return state;
   }
