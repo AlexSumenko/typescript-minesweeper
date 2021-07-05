@@ -29,8 +29,8 @@ import {
 
 import './GameField.scss';
 
-interface GameFieldProps {
-  gameFieldProp: GameFieldArray;
+interface gameFields {
+  gameField: GameFieldArray;
   gameFieldSize: number;
   gameState: GameState;
   minesLeft: number;
@@ -43,8 +43,8 @@ interface GameFieldProps {
   changeGameState: (gameState: GameState) => IChangeGameStateAction;
 }
 
-const GameField: FC<GameFieldProps | null> = ({
-  gameFieldProp,
+const GameField: FC<gameFields> = ({
+  gameField,
   gameFieldSize,
   gameState,
   minesLeft,
@@ -58,27 +58,27 @@ const GameField: FC<GameFieldProps | null> = ({
       return;
     }
     const game = new MinesweeperField(gameFieldSize);
-    const gameField = game.completedgameField;
-    saveGameFieldToStore(gameField, 10);
+    const newGameField = game.completedgameField;
+    saveGameFieldToStore(newGameField, 10);
   }, [gameState, gameFieldSize, saveGameFieldToStore]);
 
   const onCellLeftClick = ([x, y]: CellPosition): void => {
-    if (gameFieldProp[x][y].value === MINE) {
+    if (gameField[x][y].value === MINE) {
       openMineCells();
       changeGameState(GameStates.LOST);
       return;
     }
 
-    let newgameField: GameFieldArray = deepCloneGameFieldArray(gameFieldProp);
+    let newGameField: GameFieldArray = deepCloneGameFieldArray(gameField);
 
     if (gameState === GameStates.NOT_STARTED) {
       changeGameState(GameStates.IN_PROGRESS);
     }
 
-    newgameField = openSafeCells([x, y], newgameField, gameFieldSize);
-    saveGameFieldToStore(newgameField, minesLeft);
+    newGameField = openSafeCells([x, y], newGameField, gameFieldSize);
+    saveGameFieldToStore(newGameField, minesLeft);
 
-    const closedCells = countClosedCells(newgameField);
+    const closedCells = countClosedCells(newGameField);
 
     if (closedCells === gameFieldSize) {
       changeGameState(GameStates.WON);
@@ -86,7 +86,7 @@ const GameField: FC<GameFieldProps | null> = ({
     }
   };
 
-  const gameField = (
+  const gameFieldElement = (
     <div
       className="game-field"
       style={{
@@ -96,8 +96,8 @@ const GameField: FC<GameFieldProps | null> = ({
         gridTemplateRows: `repeat(${gameFieldSize}, ${320 / gameFieldSize}px)`,
       }}
     >
-      {gameFieldProp && gameFieldProp.length > 0
-        ? gameFieldProp.map((rowEl: IGameCell[], rowElId: number) =>
+      {gameField && gameField.length > 0
+        ? gameField.map((rowEl: IGameCell[], rowElId: number) =>
             rowEl.map((el: IGameCell, elId: number) => (
               <GameCell
                 key={rowElId.toString() + elId.toString()}
@@ -113,12 +113,12 @@ const GameField: FC<GameFieldProps | null> = ({
     </div>
   );
 
-  return <>{gameField}</>;
+  return <>{gameFieldElement}</>;
 };
 
 const mapStateToProps = (state: IAppState) => {
   return {
-    gameFieldProp: state.msw.gameField,
+    gameField: state.msw.gameField,
     gameFieldSize: state.msw.gameFieldSize,
     minesLeft: state.msw.minesLeft,
     gameState: state.msw.gameState,
