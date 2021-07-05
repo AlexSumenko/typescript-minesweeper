@@ -60,7 +60,7 @@ const GameField: FC<gameFields> = ({
       return;
     }
     const game = new MinesweeperField(gameFieldSize);
-    const newGameField = game.completedgameField;
+    const newGameField = game.completedGameField;
     saveGameFieldToStore(newGameField, 10);
   }, [gameState, gameFieldSize, saveGameFieldToStore]);
 

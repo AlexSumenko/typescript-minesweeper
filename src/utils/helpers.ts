@@ -69,7 +69,7 @@ export const openSafeCells = (
 ): GameFieldArray => {
   const gameField: GameFieldArray = deepCloneGameFieldArray(initialgameField);
 
-  const traversegameField = ([x, y]: CellPosition): void => {
+  const traverseGameField = ([x, y]: CellPosition): void => {
     if (gameField[x][y].isOpened) {
       return;
     }
@@ -86,14 +86,14 @@ export const openSafeCells = (
       gameField[x - 1][y - 1].value !== MINE &&
       !gameField[x - 1][y - 1].isOpened
     ) {
-      traversegameField([x - 1, y - 1]);
+      traverseGameField([x - 1, y - 1]);
     }
     if (
       x !== 0 &&
       gameField[x - 1][y].value !== MINE &&
       !gameField[x - 1][y].isOpened
     ) {
-      traversegameField([x - 1, y]);
+      traverseGameField([x - 1, y]);
     }
     if (
       x !== 0 &&
@@ -101,21 +101,21 @@ export const openSafeCells = (
       gameField[x - 1][y + 1].value !== MINE &&
       !gameField[x - 1][y + 1].isOpened
     ) {
-      traversegameField([x - 1, y + 1]);
+      traverseGameField([x - 1, y + 1]);
     }
     if (
       y !== 0 &&
       gameField[x][y - 1].value !== MINE &&
       !gameField[x][y - 1].isOpened
     ) {
-      traversegameField([x, y - 1]);
+      traverseGameField([x, y - 1]);
     }
     if (
       y !== gameFieldSize - 1 &&
       gameField[x][y + 1].value !== MINE &&
       !gameField[x][y + 1].isOpened
     ) {
-      traversegameField([x, y + 1]);
+      traverseGameField([x, y + 1]);
     }
     if (
       x !== gameFieldSize - 1 &&
@@ -123,14 +123,14 @@ export const openSafeCells = (
       gameField[x + 1][y - 1].value !== MINE &&
       !gameField[x + 1][y - 1].isOpened
     ) {
-      traversegameField([x + 1, y - 1]);
+      traverseGameField([x + 1, y - 1]);
     }
     if (
       x !== gameFieldSize - 1 &&
       gameField[x + 1][y].value !== MINE &&
       !gameField[x + 1][y].isOpened
     ) {
-      traversegameField([x + 1, y]);
+      traverseGameField([x + 1, y]);
     }
     if (
       x !== gameFieldSize - 1 &&
@@ -138,11 +138,11 @@ export const openSafeCells = (
       gameField[x + 1][y + 1].value !== MINE &&
       !gameField[x + 1][y + 1].isOpened
     ) {
-      traversegameField([x + 1, y + 1]);
+      traverseGameField([x + 1, y + 1]);
     }
   };
 
-  traversegameField([x, y]);
+  traverseGameField([x, y]);
 
   return gameField;
 };

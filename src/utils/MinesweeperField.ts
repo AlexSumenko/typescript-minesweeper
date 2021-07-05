@@ -8,14 +8,14 @@ class MinesweeperField {
 
   constructor(gameFieldSize: number) {
     this.gameFieldSize = gameFieldSize;
-    this.constructgameField();
+    this.constructGameField();
   }
 
-  get completedgameField() {
+  get completedGameField() {
     return this.gameField;
   }
 
-  private constructgameField = (): void => {
+  private constructGameField = (): void => {
     this.generateGameFieldSkeleton();
     this.generateMines();
     this.countAdjacentMines();
