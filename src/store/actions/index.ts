@@ -1,5 +1,6 @@
 export {
   changeGameState,
-  savePlayingFieldToStore,
   setCellOpen,
+  openMineCells,
+  savePlayingFieldToStore,
 } from './minesweeper';

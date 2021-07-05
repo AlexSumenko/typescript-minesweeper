@@ -28,7 +28,7 @@ const PlayingCell: FC<PlayingCellProps> = ({
     6: 'brown',
     7: 'grey',
     8: 'darkred',
-    mine: 'black',
+    '\u2691': 'black',
   };
 
   return (
@@ -37,7 +37,7 @@ const PlayingCell: FC<PlayingCellProps> = ({
       style={{
         boxShadow: `${opened ? openedShadow : closedShadow}`,
         color: `${value === null ? colorMap['0'] : colorMap[value]}`,
-        backgroundColor: `${opened && value === 'mine' ? 'red' : 'white'}`,
+        backgroundColor: `${opened && value === '\u2691' ? 'red' : 'white'}`,
       }}
       onClick={clicked}
     >

@@ -50,8 +50,11 @@ const GameBoard: FC<GameBoardProps> = ({
       return;
     }
     const game = new MinesweeperField(playFieldSize);
-    const playField = game.playField;
+    const playField = game.completedPlayField;
     savePlayingFieldToStore(playField);
+    // return () => {
+    //   savePlayingFieldToStore([]);
+    // };
   }, [gameState, playFieldSize, savePlayingFieldToStore]);
 
   useEffect(() => {
@@ -63,15 +66,6 @@ const GameBoard: FC<GameBoardProps> = ({
       clearTimeout(timerId);
     };
   }, [gameState, counter]);
-
-  // const onPlayFieldClick = (): void => {
-  //   if (
-  //     gameState === GameStates.NOT_STARTED ||
-  //     gameState === GameStates.PAUSED
-  //   ) {
-  //     changeGameState(GameStates.IN_PROGRESS);
-  //   }
-  // };
 
   const onGamePlayPauseClick = (): void => {
     changeGameState(
@@ -91,7 +85,22 @@ const GameBoard: FC<GameBoardProps> = ({
       {gameState === GameStates.PAUSED && (
         <Overlay
           content="Game is paused, click here to resume"
+          opacity={1}
           clicked={onGamePlayPauseClick}
+        />
+      )}
+      {gameState === GameStates.WON && (
+        <Overlay
+          content="Congratulations you won the game. Click here to restart the game"
+          opacity={0.7}
+          clicked={onRestartClick}
+        />
+      )}
+      {gameState === GameStates.LOST && (
+        <Overlay
+          content="We're sorry, but you lost the game. Click here to restart the game"
+          opacity={0.7}
+          clicked={onRestartClick}
         />
       )}
       <div className="game-board__top-row">
@@ -107,14 +116,6 @@ const GameBoard: FC<GameBoardProps> = ({
         </div>
       </div>
       <div className="play-container">
-        {gameState === GameStates.WON && (
-          <Overlay
-            content="Congratulations you won the game. Click the restart button"
-            clicked={() => {
-              return;
-            }}
-          />
-        )}
         <PlayField />
       </div>
     </div>

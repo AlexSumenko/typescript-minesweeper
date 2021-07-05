@@ -1,4 +1,8 @@
-import { GameStates, PlayFieldArray } from '../../models/minesweeper';
+import {
+  GameStates,
+  IPlayingCell,
+  PlayFieldArray,
+} from '../../models/minesweeper';
 import {
   ActionTypes,
   MinesweeperActions,
@@ -27,6 +31,17 @@ const reducer = (
       );
       newPlayField[x][y].isOpened = true;
       return { ...state, playField: newPlayField };
+    case ActionTypes.OPEN_MINE_CELLS:
+      const playFieldWithOpenMines: PlayFieldArray = state.playField.map(
+        (row: IPlayingCell[]): IPlayingCell[] =>
+          row.map(
+            (rowEl: IPlayingCell): IPlayingCell =>
+              rowEl.value === '\u2691'
+                ? { ...rowEl, isOpened: true }
+                : { ...rowEl }
+          )
+      );
+      return { ...state, playField: playFieldWithOpenMines };
     case ActionTypes.CHANGE_GAME_STATE:
       return { ...state, gameState: action.payload };
     default:

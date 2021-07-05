@@ -2,13 +2,17 @@ import { IPlayingCell, PlayFieldArray } from './minesweeper';
 import { CellPosition } from './minesweeper';
 
 class MinesweeperField {
-  public playField: PlayFieldArray = [];
+  private playField: PlayFieldArray = [];
   private minePositions: CellPosition[] = [];
   private playFieldSize: number;
 
   constructor(playFieldSize: number) {
     this.playFieldSize = playFieldSize;
     this.constructPlayField();
+  }
+
+  get completedPlayField() {
+    return this.playField;
   }
 
   private constructPlayField = (): void => {
@@ -34,7 +38,7 @@ class MinesweeperField {
     while (!this.isAllMinesGenerated()) {
       [x, y] = this.generateRandomPosition();
       if (!this.isExistingMinePosition([x, y])) {
-        this.playField[x][y].value = 'mine';
+        this.playField[x][y].value = '\u2691';
         this.minePositions.push([x, y]);
       }
     }
@@ -66,45 +70,45 @@ class MinesweeperField {
 
   private incrementAdjacentCounts = (minePosition: CellPosition): void => {
     const [x, y]: CellPosition = minePosition;
-    if (x !== 0 && y !== 0 && this.playField[x - 1][y - 1].value !== 'mine') {
+    if (x !== 0 && y !== 0 && this.playField[x - 1][y - 1].value !== '\u2691') {
       (this.playField[x - 1][y - 1].value as number)++;
     }
-    if (x !== 0 && this.playField[x - 1][y].value !== 'mine') {
+    if (x !== 0 && this.playField[x - 1][y].value !== '\u2691') {
       (this.playField[x - 1][y].value as number)++;
     }
     if (
       x !== 0 &&
       y !== this.playFieldSize - 1 &&
-      this.playField[x - 1][y + 1].value !== 'mine'
+      this.playField[x - 1][y + 1].value !== '\u2691'
     ) {
       (this.playField[x - 1][y + 1].value as number)++;
     }
-    if (y !== 0 && this.playField[x][y - 1].value !== 'mine') {
+    if (y !== 0 && this.playField[x][y - 1].value !== '\u2691') {
       (this.playField[x][y - 1].value as number)++;
     }
     if (
       y !== this.playFieldSize - 1 &&
-      this.playField[x][y + 1].value !== 'mine'
+      this.playField[x][y + 1].value !== '\u2691'
     ) {
       (this.playField[x][y + 1].value as number)++;
     }
     if (
       x !== this.playFieldSize - 1 &&
       y !== 0 &&
-      this.playField[x + 1][y - 1].value !== 'mine'
+      this.playField[x + 1][y - 1].value !== '\u2691'
     ) {
       (this.playField[x + 1][y - 1].value as number)++;
     }
     if (
       x !== this.playFieldSize - 1 &&
-      this.playField[x + 1][y].value !== 'mine'
+      this.playField[x + 1][y].value !== '\u2691'
     ) {
       (this.playField[x + 1][y].value as number)++;
     }
     if (
       x !== this.playFieldSize - 1 &&
       y !== this.playFieldSize - 1 &&
-      this.playField[x + 1][y + 1].value !== 'mine'
+      this.playField[x + 1][y + 1].value !== '\u2691'
     ) {
       (this.playField[x + 1][y + 1].value as number)++;
     }

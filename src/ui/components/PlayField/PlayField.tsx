@@ -14,6 +14,7 @@ import {
 } from '../../../models/storeActions';
 import {
   changeGameState,
+  openMineCells,
   savePlayingFieldToStore,
 } from '../../../store/actions';
 import { deepClonePlayFieldArray, openSafeCells } from '../../../utils/helpers';
@@ -28,6 +29,7 @@ interface PlayFieldProps {
   savePlayingFieldToStore: (
     playField: PlayFieldArray
   ) => ISavePlayingFieldToStoreAction;
+  openMineCells: () => void;
   changeGameState: (gameState: GameState) => IChangeGameStateAction;
 }
 
@@ -37,8 +39,15 @@ const PlayField: FC<PlayFieldProps | null> = ({
   gameState,
   savePlayingFieldToStore,
   changeGameState,
+  openMineCells,
 }): ReactElement => {
   const onCellClick = ([x, y]: CellPosition): void => {
+    if (playFieldProp[x][y].value === '\u2691') {
+      openMineCells();
+      changeGameState(GameStates.LOST);
+      return;
+    }
+
     let newPlayField: PlayFieldArray = deepClonePlayFieldArray(playFieldProp);
     if (
       gameState === GameStates.NOT_STARTED ||
@@ -101,11 +110,11 @@ const mapStateToProps = (state: IAppState) => {
 
 const dispatchStateToProps = (dispatch: any) => {
   return {
-    startGame: (gameState: GameStates) => dispatch(changeGameState(gameState)),
     savePlayingFieldToStore: (playField: PlayFieldArray) =>
       dispatch(savePlayingFieldToStore(playField)),
     changeGameState: (gameState: GameState) =>
       dispatch(changeGameState(gameState)),
+    openMineCells: () => dispatch(openMineCells()),
   };
 };
 

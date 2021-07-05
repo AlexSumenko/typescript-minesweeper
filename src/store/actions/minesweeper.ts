@@ -3,6 +3,7 @@ import {
   ISavePlayingFieldToStoreAction,
   ISetCellOpenAction,
   IChangeGameStateAction,
+  IOpenMineCells,
 } from '../../models/storeActions';
 import { GameState, PlayFieldArray } from '../../models/minesweeper';
 import { CellPosition } from '../../models/minesweeper';
@@ -20,6 +21,12 @@ export const setCellOpen = (cellPosition: CellPosition): ISetCellOpenAction => {
   return {
     type: ActionTypes.SET_CELL_OPEN,
     payload: cellPosition,
+  };
+};
+
+export const openMineCells = (): IOpenMineCells => {
+  return {
+    type: ActionTypes.OPEN_MINE_CELLS,
   };
 };
 
