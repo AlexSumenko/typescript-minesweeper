@@ -1,7 +1,6 @@
 import {
+  CellPosition,
   GameStates,
-  IPlayingCell,
-  MINE,
   PlayFieldArray,
 } from '../../models/minesweeper';
 import {
@@ -9,12 +8,16 @@ import {
   MinesweeperActions,
   IPlayFieldState,
 } from '../../models/store';
-import { deepClonePlayFieldArray } from '../../utils/helpers';
+import {
+  deepClonePlayFieldArray,
+  handleGuessedValueChange,
+  openMineCells,
+} from '../../utils/helpers';
 
 const initialState: IPlayFieldState = {
   playField: [],
   playFieldSize: 10,
-  minesLeft: 10,
+  minesLeft: 0,
   gameState: GameStates.NOT_STARTED,
 };
 
@@ -24,25 +27,41 @@ const reducer = (
 ): IPlayFieldState => {
   switch (action.type) {
     case ActionTypes.SAVE_PLAY_FIELD_TO_STORE:
-      return { ...state, playField: action.payload };
+      return {
+        ...state,
+        playField: action.payload.playField,
+        minesLeft: action.payload.minesLeft,
+      };
     case ActionTypes.SET_CELL_OPEN:
-      const [x, y] = action.payload;
+      const [openX, openY]: CellPosition = action.payload;
       const newPlayField: PlayFieldArray = deepClonePlayFieldArray(
         state.playField
       );
-      newPlayField[x][y].isOpened = true;
+      newPlayField[openX][openY].isOpened = true;
       return { ...state, playField: newPlayField };
     case ActionTypes.OPEN_MINE_CELLS:
-      const playFieldWithOpenMines: PlayFieldArray = state.playField.map(
-        (row: IPlayingCell[]): IPlayingCell[] =>
-          row.map(
-            (rowEl: IPlayingCell): IPlayingCell =>
-              rowEl.value === MINE ? { ...rowEl, isOpened: true } : { ...rowEl }
-          )
+      const playFieldWithOpenMines: PlayFieldArray = openMineCells(
+        state.playField
       );
       return { ...state, playField: playFieldWithOpenMines };
     case ActionTypes.CHANGE_GAME_STATE:
       return { ...state, gameState: action.payload };
+    case ActionTypes.SET_GUESSED_VALUE:
+      const [x, y]: CellPosition = action.payload;
+      let newMinesLeft: number = 0;
+      const playFieldWithGuessedValue: PlayFieldArray = deepClonePlayFieldArray(
+        state.playField
+      );
+      [playFieldWithGuessedValue[x][y].guessedValue, newMinesLeft] =
+        handleGuessedValueChange(
+          playFieldWithGuessedValue[x][y].guessedValue,
+          state.minesLeft
+        );
+      return {
+        ...state,
+        playField: playFieldWithGuessedValue,
+        minesLeft: newMinesLeft,
+      };
     default:
       return state;
   }

@@ -21,12 +21,15 @@ const GameBoardPage: FC<GameBoardPageProps> = ({
   }, [changeGameState]);
 
   return (
-    <div className="game-board">
-      <GameControlsBar />
-      <div className="play-container">
-        <PlayField />
+    <>
+      <div className="game-board">
+        <GameControlsBar />
+        <div className="play-container">
+          <PlayField />
+        </div>
       </div>
-    </div>
+      <p>HINT! Use right mouse button to mark mines or potential mines</p>
+    </>
   );
 };
 

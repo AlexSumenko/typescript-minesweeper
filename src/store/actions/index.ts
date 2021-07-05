@@ -3,4 +3,5 @@ export {
   setCellOpen,
   openMineCells,
   savePlayingFieldToStore,
+  setGuessedValue,
 } from './minesweeper';

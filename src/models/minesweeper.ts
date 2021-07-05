@@ -1,4 +1,5 @@
 export const MINE = '\u2691';
+export const QUESTION_MARK = '\u003F';
 
 export enum Routes {
   HOME_PAGE = '/',
@@ -31,8 +32,11 @@ export type PlayingCellValue =
   | 8
   | typeof MINE;
 
+export type GuessedCellValue = null | typeof MINE | typeof QUESTION_MARK;
+
 export interface IPlayingCell {
   value: PlayingCellValue;
+  guessedValue: GuessedCellValue;
   isOpened: boolean;
 }
 

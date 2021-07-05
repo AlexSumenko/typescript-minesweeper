@@ -25,7 +25,7 @@ class MinesweeperField {
     for (let x = 0; x < this.playFieldSize; x++) {
       let row: IPlayingCell[] = [];
       for (let y = 0; y < this.playFieldSize; y++) {
-        row.push({ value: null, isOpened: false });
+        row.push({ value: null, isOpened: false, guessedValue: null });
       }
       this.playField.push(row);
       row = [];

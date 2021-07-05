@@ -1,8 +1,10 @@
 import {
   CellPosition,
+  GuessedCellValue,
   IPlayingCell,
   MINE,
   PlayFieldArray,
+  QUESTION_MARK,
 } from '../models/minesweeper';
 
 export const timeFormatter = (value: number): string => {
@@ -21,6 +23,43 @@ export const deepClonePlayFieldArray = (
       return { ...rowEl };
     })
   );
+};
+
+export const openMineCells = (playField: PlayFieldArray): PlayFieldArray => {
+  return playField.map((row: IPlayingCell[]): IPlayingCell[] =>
+    row.map(
+      (rowEl: IPlayingCell): IPlayingCell =>
+        rowEl.value === MINE ? { ...rowEl, isOpened: true } : { ...rowEl }
+    )
+  );
+};
+
+export const countClosedCells = (playField: PlayFieldArray): number => {
+  return playField.reduce(
+    (totalCount: number, row: IPlayingCell[]) =>
+      row.reduce(
+        (rowCount: number, rowEl: IPlayingCell) =>
+          rowCount + Number(!rowEl.isOpened),
+        0
+      ) + totalCount,
+    0
+  );
+};
+
+export const handleGuessedValueChange = (
+  currentValue: GuessedCellValue,
+  minesLeft: number
+): [GuessedCellValue, number] => {
+  switch (currentValue) {
+    case null:
+      return [MINE, minesLeft - 1];
+    case MINE:
+      return [QUESTION_MARK, minesLeft];
+    case QUESTION_MARK:
+      return [null, minesLeft + 1];
+    default:
+      return [null, minesLeft];
+  }
 };
 
 export const openSafeCells = (

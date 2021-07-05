@@ -4,16 +4,18 @@ import {
   ISetCellOpenAction,
   IChangeGameStateAction,
   IOpenMineCells,
+  ISetGuessedValue,
 } from '../../models/store';
 import { GameState, PlayFieldArray } from '../../models/minesweeper';
 import { CellPosition } from '../../models/minesweeper';
 
 export const savePlayingFieldToStore = (
-  playField: PlayFieldArray
+  playField: PlayFieldArray,
+  minesLeft: number
 ): ISavePlayingFieldToStoreAction => {
   return {
     type: ActionTypes.SAVE_PLAY_FIELD_TO_STORE,
-    payload: playField,
+    payload: { playField, minesLeft },
   };
 };
 
@@ -36,5 +38,14 @@ export const changeGameState = (
   return {
     type: ActionTypes.CHANGE_GAME_STATE,
     payload: gameState,
+  };
+};
+
+export const setGuessedValue = (
+  cellPosition: CellPosition
+): ISetGuessedValue => {
+  return {
+    type: ActionTypes.SET_GUESSED_VALUE,
+    payload: cellPosition,
   };
 };

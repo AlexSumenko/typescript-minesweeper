@@ -1,5 +1,7 @@
 import { FC, ReactElement, useEffect } from 'react';
 import { connect } from 'react-redux';
+import PlayingCell from './PlayingCell/PlayingCell';
+import MinesweeperField from '../../../utils/MinesweeperField';
 import {
   CellPosition,
   GameState,
@@ -17,10 +19,13 @@ import {
   changeGameState,
   openMineCells,
   savePlayingFieldToStore,
+  setGuessedValue,
 } from '../../../store/actions';
-import { deepClonePlayFieldArray, openSafeCells } from '../../../utils/helpers';
-import MinesweeperField from '../../../utils/MinesweeperField';
-import PlayingCell from './PlayingCell/PlayingCell';
+import {
+  countClosedCells,
+  deepClonePlayFieldArray,
+  openSafeCells,
+} from '../../../utils/helpers';
 
 import './PlayField.scss';
 
@@ -29,8 +34,10 @@ interface PlayFieldProps {
   playFieldSize: number;
   gameState: GameState;
   minesLeft: number;
+  setGuessedValue: ([x, y]: CellPosition) => void;
   savePlayingFieldToStore: (
-    playField: PlayFieldArray
+    playField: PlayFieldArray,
+    minesLeft: number
   ) => ISavePlayingFieldToStoreAction;
   openMineCells: () => void;
   changeGameState: (gameState: GameState) => IChangeGameStateAction;
@@ -44,6 +51,7 @@ const PlayField: FC<PlayFieldProps | null> = ({
   savePlayingFieldToStore,
   changeGameState,
   openMineCells,
+  setGuessedValue,
 }): ReactElement => {
   useEffect(() => {
     if (gameState !== GameStates.NOT_STARTED) {
@@ -51,10 +59,10 @@ const PlayField: FC<PlayFieldProps | null> = ({
     }
     const game = new MinesweeperField(playFieldSize);
     const playField = game.completedPlayField;
-    savePlayingFieldToStore(playField);
+    savePlayingFieldToStore(playField, 10);
   }, [gameState, playFieldSize, savePlayingFieldToStore]);
 
-  const onCellClick = ([x, y]: CellPosition): void => {
+  const onCellLeftClick = ([x, y]: CellPosition): void => {
     if (playFieldProp[x][y].value === MINE) {
       openMineCells();
       changeGameState(GameStates.LOST);
@@ -62,25 +70,17 @@ const PlayField: FC<PlayFieldProps | null> = ({
     }
 
     let newPlayField: PlayFieldArray = deepClonePlayFieldArray(playFieldProp);
-    if (
-      gameState === GameStates.NOT_STARTED ||
-      gameState === GameStates.PAUSED
-    ) {
+
+    if (gameState === GameStates.NOT_STARTED) {
       changeGameState(GameStates.IN_PROGRESS);
     }
-    newPlayField = openSafeCells([x, y], newPlayField, playFieldSize);
-    savePlayingFieldToStore(newPlayField);
 
-    const openedCells = newPlayField.reduce(
-      (totalCount: number, row: IPlayingCell[]) =>
-        row.reduce(
-          (rowCount: number, rowEl: IPlayingCell) =>
-            rowCount + Number(rowEl.isOpened),
-          0
-        ) + totalCount,
-      0
-    );
-    if (playFieldSize * playFieldSize - minesLeft === openedCells) {
+    newPlayField = openSafeCells([x, y], newPlayField, playFieldSize);
+    savePlayingFieldToStore(newPlayField, minesLeft);
+
+    const closedCells = countClosedCells(newPlayField);
+
+    if (closedCells === playFieldSize) {
       changeGameState(GameStates.WON);
       openMineCells();
     }
@@ -103,7 +103,9 @@ const PlayField: FC<PlayFieldProps | null> = ({
                 key={rowElId.toString() + elId.toString()}
                 value={el.value}
                 opened={el.isOpened}
-                clicked={() => onCellClick([rowElId, elId])}
+                guessedValue={el.guessedValue}
+                leftClicked={() => onCellLeftClick([rowElId, elId])}
+                rightClicked={() => setGuessedValue([rowElId, elId])}
               />
             ))
           )
@@ -125,11 +127,13 @@ const mapStateToProps = (state: IAppState) => {
 
 const dispatchStateToProps = (dispatch: any) => {
   return {
-    savePlayingFieldToStore: (playField: PlayFieldArray) =>
-      dispatch(savePlayingFieldToStore(playField)),
+    savePlayingFieldToStore: (playField: PlayFieldArray, minesLeft: number) =>
+      dispatch(savePlayingFieldToStore(playField, minesLeft)),
     changeGameState: (gameState: GameState) =>
       dispatch(changeGameState(gameState)),
     openMineCells: () => dispatch(openMineCells()),
+    setGuessedValue: ([x, y]: CellPosition) =>
+      dispatch(setGuessedValue([x, y])),
   };
 };
 

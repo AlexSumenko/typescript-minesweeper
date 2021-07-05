@@ -2,14 +2,13 @@ import { FC, ReactElement, useCallback, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import Counter from '../common/Counter/Counter';
 import GameControl from '../common/GameControl/GameControl';
+import Overlay from '../common/Overlay/Overlay';
 import { timeFormatter } from '../../../utils/helpers';
-
-import './GameControlsBar.scss';
 import { IAppState, IChangeGameStateAction } from '../../../models/store';
 import { GameState, GameStates } from '../../../models/minesweeper';
-import Overlay from '../common/Overlay/Overlay';
 import { changeGameState } from '../../../store/actions';
 
+import './GameControlsBar.scss';
 interface GameControlsBarProps {
   minesLeft: number;
   gameState: GameState;

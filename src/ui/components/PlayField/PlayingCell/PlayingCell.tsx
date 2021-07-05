@@ -1,25 +1,47 @@
-import { FC, ReactElement } from 'react';
-import { connect } from 'react-redux';
+import { FC, ReactElement, useEffect, useRef } from 'react';
 import {
-  CellPosition,
+  GuessedCellValue,
   MINE,
   PlayingCellValue,
 } from '../../../../models/minesweeper';
-import { setCellOpen } from '../../../../store/actions';
 
 import './PlayingCell.scss';
 
 interface PlayingCellProps {
   value: PlayingCellValue;
+  guessedValue: GuessedCellValue;
   opened: boolean;
-  clicked: () => void;
+  leftClicked: () => void;
+  rightClicked: () => void;
 }
 
 const PlayingCell: FC<PlayingCellProps> = ({
   value,
+  guessedValue,
   opened,
-  clicked,
+  leftClicked,
+  rightClicked,
 }): ReactElement => {
+  const cellRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (cellRef && cellRef.current) {
+      const currentValue = cellRef.current;
+      currentValue.addEventListener('contextmenu', onContextMenu);
+      return () => {
+        currentValue.removeEventListener('contextmenu', onContextMenu);
+      };
+    }
+  });
+
+  const onContextMenu = (e: Event): void => {
+    e.preventDefault();
+    if (opened) {
+      return;
+    }
+    rightClicked();
+  };
+
   const closedShadow = 'inset -6px -8px 5px -6px #000000';
   const openedShadow = 'inset 6px 9px 5px -6px #000000';
   const colorMap = {
@@ -40,20 +62,24 @@ const PlayingCell: FC<PlayingCellProps> = ({
       className="playing-cell"
       style={{
         boxShadow: `${opened ? openedShadow : closedShadow}`,
-        color: `${value === null ? colorMap['0'] : colorMap[value]}`,
         backgroundColor: `${opened && value === MINE ? 'red' : 'white'}`,
       }}
-      onClick={clicked}
+      onClick={leftClicked}
+      ref={cellRef}
     >
-      <span>{opened && value}</span>
+      {opened ? (
+        <span
+          style={{
+            color: `${value === null ? colorMap['0'] : colorMap[value]}`,
+          }}
+        >
+          {value}
+        </span>
+      ) : (
+        <span>{guessedValue}</span>
+      )}
     </div>
   );
 };
 
-const dispatchStateToProps = (dispatch: any) => {
-  return {
-    setCellOpen: ([x, y]: CellPosition) => dispatch(setCellOpen([x, y])),
-  };
-};
-
-export default connect(null, dispatchStateToProps)(PlayingCell);
+export default PlayingCell;
