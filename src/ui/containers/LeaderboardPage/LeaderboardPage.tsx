@@ -1,7 +1,7 @@
 import { FC, ReactElement } from 'react';
 
-const Leaderboard: FC = (): ReactElement => {
-  return <div>Playing Field</div>;
+const LeaderBoard: FC = (): ReactElement => {
+  return <div>Leader Board works</div>;
 };
 
-export default Leaderboard;
+export default LeaderBoard;

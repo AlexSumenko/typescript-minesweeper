@@ -1,7 +1,11 @@
 import { FC, ReactElement } from 'react';
 import { connect } from 'react-redux';
-import { CellPosition, PlayingCellValue } from '../../../models/minesweeper';
-import { setCellOpen } from '../../../store/actions';
+import {
+  CellPosition,
+  MINE,
+  PlayingCellValue,
+} from '../../../../models/minesweeper';
+import { setCellOpen } from '../../../../store/actions';
 
 import './PlayingCell.scss';
 
@@ -37,7 +41,7 @@ const PlayingCell: FC<PlayingCellProps> = ({
       style={{
         boxShadow: `${opened ? openedShadow : closedShadow}`,
         color: `${value === null ? colorMap['0'] : colorMap[value]}`,
-        backgroundColor: `${opened && value === '\u2691' ? 'red' : 'white'}`,
+        backgroundColor: `${opened && value === MINE ? 'red' : 'white'}`,
       }}
       onClick={clicked}
     >

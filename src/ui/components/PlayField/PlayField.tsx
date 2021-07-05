@@ -1,24 +1,26 @@
-import { FC, ReactElement } from 'react';
+import { FC, ReactElement, useEffect } from 'react';
 import { connect } from 'react-redux';
 import {
   CellPosition,
   GameState,
   GameStates,
   IPlayingCell,
+  MINE,
   PlayFieldArray,
 } from '../../../models/minesweeper';
 import {
   IAppState,
   IChangeGameStateAction,
   ISavePlayingFieldToStoreAction,
-} from '../../../models/storeActions';
+} from '../../../models/store';
 import {
   changeGameState,
   openMineCells,
   savePlayingFieldToStore,
 } from '../../../store/actions';
 import { deepClonePlayFieldArray, openSafeCells } from '../../../utils/helpers';
-import PlayingCell from '../PlayingCell/PlayingCell';
+import MinesweeperField from '../../../utils/MinesweeperField';
+import PlayingCell from './PlayingCell/PlayingCell';
 
 import './PlayField.scss';
 
@@ -26,6 +28,7 @@ interface PlayFieldProps {
   playFieldProp: PlayFieldArray;
   playFieldSize: number;
   gameState: GameState;
+  minesLeft: number;
   savePlayingFieldToStore: (
     playField: PlayFieldArray
   ) => ISavePlayingFieldToStoreAction;
@@ -37,12 +40,22 @@ const PlayField: FC<PlayFieldProps | null> = ({
   playFieldProp,
   playFieldSize,
   gameState,
+  minesLeft,
   savePlayingFieldToStore,
   changeGameState,
   openMineCells,
 }): ReactElement => {
+  useEffect(() => {
+    if (gameState !== GameStates.NOT_STARTED) {
+      return;
+    }
+    const game = new MinesweeperField(playFieldSize);
+    const playField = game.completedPlayField;
+    savePlayingFieldToStore(playField);
+  }, [gameState, playFieldSize, savePlayingFieldToStore]);
+
   const onCellClick = ([x, y]: CellPosition): void => {
-    if (playFieldProp[x][y].value === '\u2691') {
+    if (playFieldProp[x][y].value === MINE) {
       openMineCells();
       changeGameState(GameStates.LOST);
       return;
@@ -67,8 +80,9 @@ const PlayField: FC<PlayFieldProps | null> = ({
         ) + totalCount,
       0
     );
-    if (playFieldSize * playFieldSize - 10 === openedCells) {
+    if (playFieldSize * playFieldSize - minesLeft === openedCells) {
       changeGameState(GameStates.WON);
+      openMineCells();
     }
   };
 
@@ -104,6 +118,7 @@ const mapStateToProps = (state: IAppState) => {
   return {
     playFieldProp: state.msw.playField,
     playFieldSize: state.msw.playFieldSize,
+    minesLeft: state.msw.minesLeft,
     gameState: state.msw.gameState,
   };
 };

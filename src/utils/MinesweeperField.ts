@@ -1,5 +1,5 @@
-import { IPlayingCell, PlayFieldArray } from './minesweeper';
-import { CellPosition } from './minesweeper';
+import { IPlayingCell, MINE, PlayFieldArray } from '../models/minesweeper';
+import { CellPosition } from '../models/minesweeper';
 
 class MinesweeperField {
   private playField: PlayFieldArray = [];
@@ -38,7 +38,7 @@ class MinesweeperField {
     while (!this.isAllMinesGenerated()) {
       [x, y] = this.generateRandomPosition();
       if (!this.isExistingMinePosition([x, y])) {
-        this.playField[x][y].value = '\u2691';
+        this.playField[x][y].value = MINE;
         this.minePositions.push([x, y]);
       }
     }
@@ -70,45 +70,45 @@ class MinesweeperField {
 
   private incrementAdjacentCounts = (minePosition: CellPosition): void => {
     const [x, y]: CellPosition = minePosition;
-    if (x !== 0 && y !== 0 && this.playField[x - 1][y - 1].value !== '\u2691') {
+    if (x !== 0 && y !== 0 && this.playField[x - 1][y - 1].value !== MINE) {
       (this.playField[x - 1][y - 1].value as number)++;
     }
-    if (x !== 0 && this.playField[x - 1][y].value !== '\u2691') {
+    if (x !== 0 && this.playField[x - 1][y].value !== MINE) {
       (this.playField[x - 1][y].value as number)++;
     }
     if (
       x !== 0 &&
       y !== this.playFieldSize - 1 &&
-      this.playField[x - 1][y + 1].value !== '\u2691'
+      this.playField[x - 1][y + 1].value !== MINE
     ) {
       (this.playField[x - 1][y + 1].value as number)++;
     }
-    if (y !== 0 && this.playField[x][y - 1].value !== '\u2691') {
+    if (y !== 0 && this.playField[x][y - 1].value !== MINE) {
       (this.playField[x][y - 1].value as number)++;
     }
     if (
       y !== this.playFieldSize - 1 &&
-      this.playField[x][y + 1].value !== '\u2691'
+      this.playField[x][y + 1].value !== MINE
     ) {
       (this.playField[x][y + 1].value as number)++;
     }
     if (
       x !== this.playFieldSize - 1 &&
       y !== 0 &&
-      this.playField[x + 1][y - 1].value !== '\u2691'
+      this.playField[x + 1][y - 1].value !== MINE
     ) {
       (this.playField[x + 1][y - 1].value as number)++;
     }
     if (
       x !== this.playFieldSize - 1 &&
-      this.playField[x + 1][y].value !== '\u2691'
+      this.playField[x + 1][y].value !== MINE
     ) {
       (this.playField[x + 1][y].value as number)++;
     }
     if (
       x !== this.playFieldSize - 1 &&
       y !== this.playFieldSize - 1 &&
-      this.playField[x + 1][y + 1].value !== '\u2691'
+      this.playField[x + 1][y + 1].value !== MINE
     ) {
       (this.playField[x + 1][y + 1].value as number)++;
     }

@@ -1,3 +1,5 @@
+export const MINE = '\u2691';
+
 export enum Routes {
   HOME_PAGE = '/',
   GAME_BOARD = '/game-board',
@@ -17,7 +19,17 @@ export enum Locales {
   RU = 'RU',
 }
 
-export type PlayingCellValue = null | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | '\u2691';
+export type PlayingCellValue =
+  | null
+  | 1
+  | 2
+  | 3
+  | 4
+  | 5
+  | 6
+  | 7
+  | 8
+  | typeof MINE;
 
 export interface IPlayingCell {
   value: PlayingCellValue;

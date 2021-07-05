@@ -1,6 +1,7 @@
 import {
   CellPosition,
   IPlayingCell,
+  MINE,
   PlayFieldArray,
 } from '../models/minesweeper';
 
@@ -43,14 +44,14 @@ export const openSafeCells = (
     if (
       x !== 0 &&
       y !== 0 &&
-      playField[x - 1][y - 1].value !== '\u2691' &&
+      playField[x - 1][y - 1].value !== MINE &&
       !playField[x - 1][y - 1].isOpened
     ) {
       traversePlayField([x - 1, y - 1]);
     }
     if (
       x !== 0 &&
-      playField[x - 1][y].value !== '\u2691' &&
+      playField[x - 1][y].value !== MINE &&
       !playField[x - 1][y].isOpened
     ) {
       traversePlayField([x - 1, y]);
@@ -58,21 +59,21 @@ export const openSafeCells = (
     if (
       x !== 0 &&
       y !== playFieldSize - 1 &&
-      playField[x - 1][y + 1].value !== '\u2691' &&
+      playField[x - 1][y + 1].value !== MINE &&
       !playField[x - 1][y + 1].isOpened
     ) {
       traversePlayField([x - 1, y + 1]);
     }
     if (
       y !== 0 &&
-      playField[x][y - 1].value !== '\u2691' &&
+      playField[x][y - 1].value !== MINE &&
       !playField[x][y - 1].isOpened
     ) {
       traversePlayField([x, y - 1]);
     }
     if (
       y !== playFieldSize - 1 &&
-      playField[x][y + 1].value !== '\u2691' &&
+      playField[x][y + 1].value !== MINE &&
       !playField[x][y + 1].isOpened
     ) {
       traversePlayField([x, y + 1]);
@@ -80,14 +81,14 @@ export const openSafeCells = (
     if (
       x !== playFieldSize - 1 &&
       y !== 0 &&
-      playField[x + 1][y - 1].value !== '\u2691' &&
+      playField[x + 1][y - 1].value !== MINE &&
       !playField[x + 1][y - 1].isOpened
     ) {
       traversePlayField([x + 1, y - 1]);
     }
     if (
       x !== playFieldSize - 1 &&
-      playField[x + 1][y].value !== '\u2691' &&
+      playField[x + 1][y].value !== MINE &&
       !playField[x + 1][y].isOpened
     ) {
       traversePlayField([x + 1, y]);
@@ -95,7 +96,7 @@ export const openSafeCells = (
     if (
       x !== playFieldSize - 1 &&
       y !== playFieldSize - 1 &&
-      playField[x + 1][y + 1].value !== '\u2691' &&
+      playField[x + 1][y + 1].value !== MINE &&
       !playField[x + 1][y + 1].isOpened
     ) {
       traversePlayField([x + 1, y + 1]);

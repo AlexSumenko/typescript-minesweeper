@@ -1,6 +1,6 @@
 import { FC, ReactElement } from 'react';
 import { Link } from 'react-router-dom';
-import MenuItem from '../../components/MenuItem/MenuItem';
+import MenuItem from '../../components/common/MenuItem/MenuItem';
 
 import { Routes } from '../../../models/minesweeper';
 

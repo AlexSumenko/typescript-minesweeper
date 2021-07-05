@@ -1,13 +1,14 @@
 import {
   GameStates,
   IPlayingCell,
+  MINE,
   PlayFieldArray,
 } from '../../models/minesweeper';
 import {
   ActionTypes,
   MinesweeperActions,
   IPlayFieldState,
-} from '../../models/storeActions';
+} from '../../models/store';
 import { deepClonePlayFieldArray } from '../../utils/helpers';
 
 const initialState: IPlayFieldState = {
@@ -36,9 +37,7 @@ const reducer = (
         (row: IPlayingCell[]): IPlayingCell[] =>
           row.map(
             (rowEl: IPlayingCell): IPlayingCell =>
-              rowEl.value === '\u2691'
-                ? { ...rowEl, isOpened: true }
-                : { ...rowEl }
+              rowEl.value === MINE ? { ...rowEl, isOpened: true } : { ...rowEl }
           )
       );
       return { ...state, playField: playFieldWithOpenMines };

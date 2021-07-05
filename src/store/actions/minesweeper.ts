@@ -4,7 +4,7 @@ import {
   ISetCellOpenAction,
   IChangeGameStateAction,
   IOpenMineCells,
-} from '../../models/storeActions';
+} from '../../models/store';
 import { GameState, PlayFieldArray } from '../../models/minesweeper';
 import { CellPosition } from '../../models/minesweeper';
 
