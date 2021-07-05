@@ -6,7 +6,7 @@ import {
 import {
   MinesweeperActionTypes,
   MinesweeperActions,
-  IgameFieldState,
+  IGameFieldState,
 } from '../../models/store';
 import {
   deepCloneGameFieldArray,
@@ -14,7 +14,7 @@ import {
   openMineCells,
 } from '../../utils/helpers';
 
-const initialState: IgameFieldState = {
+const initialState: IGameFieldState = {
   gameField: [],
   gameFieldSize: 10,
   minesLeft: 0,
@@ -22,9 +22,9 @@ const initialState: IgameFieldState = {
 };
 
 const reducer = (
-  state: IgameFieldState = initialState,
+  state: IGameFieldState = initialState,
   action: MinesweeperActions
-): IgameFieldState => {
+): IGameFieldState => {
   switch (action.type) {
     case MinesweeperActionTypes.SAVE_GAME_FIELD_TO_STORE:
       return {

@@ -18,7 +18,7 @@ export interface ISetCellOpenAction {
   payload: CellPosition;
 }
 
-export interface IOpenMineCells {
+export interface IOpenMineCellsAction {
   type: typeof MinesweeperActionTypes.OPEN_MINE_CELLS;
 }
 
@@ -27,7 +27,7 @@ export interface IChangeGameStateAction {
   payload: GameState;
 }
 
-export interface ISetGuessedValue {
+export interface ISetGuessedValueAction {
   type: typeof MinesweeperActionTypes.SET_GUESSED_VALUE;
   payload: CellPosition;
 }
@@ -35,9 +35,9 @@ export interface ISetGuessedValue {
 export type MinesweeperActions =
   | ISaveGameFieldToStoreAction
   | ISetCellOpenAction
-  | IOpenMineCells
+  | IOpenMineCellsAction
   | IChangeGameStateAction
-  | ISetGuessedValue;
+  | ISetGuessedValueAction;
 
 export enum LanguageActionTypes {
   TOGGLE_SELECTED_LANGUAGE = 'TOGGLE_SELECTED_LANGUAGE',
@@ -50,7 +50,7 @@ export interface IToggleLanguage {
 
 export type LanguageActions = IToggleLanguage;
 
-export interface IgameFieldState {
+export interface IGameFieldState {
   gameField: GameFieldArray;
   gameFieldSize: number;
   minesLeft: number;
@@ -62,6 +62,6 @@ export interface ILanguageState {
 }
 
 export interface IAppState {
-  msw: IgameFieldState;
+  msw: IGameFieldState;
   lang: ILanguageState;
 }

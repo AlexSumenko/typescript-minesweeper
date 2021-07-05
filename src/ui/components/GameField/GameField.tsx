@@ -13,7 +13,9 @@ import {
 import {
   IAppState,
   IChangeGameStateAction,
+  IOpenMineCellsAction,
   ISaveGameFieldToStoreAction,
+  ISetGuessedValueAction,
 } from '../../../models/store';
 import {
   changeGameState,
@@ -127,12 +129,15 @@ const mapStateToProps = (state: IAppState) => {
 
 const dispatchStateToProps = (dispatch: any) => {
   return {
-    saveGameFieldToStore: (gameField: GameFieldArray, minesLeft: number) =>
+    saveGameFieldToStore: (
+      gameField: GameFieldArray,
+      minesLeft: number
+    ): ISaveGameFieldToStoreAction =>
       dispatch(saveGameFieldToStore(gameField, minesLeft)),
-    changeGameState: (gameState: GameState) =>
+    changeGameState: (gameState: GameState): IChangeGameStateAction =>
       dispatch(changeGameState(gameState)),
-    openMineCells: () => dispatch(openMineCells()),
-    setGuessedValue: ([x, y]: CellPosition) =>
+    openMineCells: (): IOpenMineCellsAction => dispatch(openMineCells()),
+    setGuessedValue: ([x, y]: CellPosition): ISetGuessedValueAction =>
       dispatch(setGuessedValue([x, y])),
   };
 };

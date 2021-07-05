@@ -97,7 +97,7 @@ const mapStateToProps = (state: IAppState) => {
 
 const dispatchStateToProps = (dispatch: any) => {
   return {
-    changeGameState: (gameState: GameState) =>
+    changeGameState: (gameState: GameState): IChangeGameStateAction =>
       dispatch(changeGameState(gameState)),
   };
 };

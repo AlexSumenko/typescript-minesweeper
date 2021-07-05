@@ -3,8 +3,8 @@ import {
   ISaveGameFieldToStoreAction,
   ISetCellOpenAction,
   IChangeGameStateAction,
-  IOpenMineCells,
-  ISetGuessedValue,
+  IOpenMineCellsAction,
+  ISetGuessedValueAction,
 } from '../../models/store';
 import { GameState, GameFieldArray } from '../../models/minesweeper';
 import { CellPosition } from '../../models/minesweeper';
@@ -26,7 +26,7 @@ export const setCellOpen = (cellPosition: CellPosition): ISetCellOpenAction => {
   };
 };
 
-export const openMineCells = (): IOpenMineCells => {
+export const openMineCells = (): IOpenMineCellsAction => {
   return {
     type: MinesweeperActionTypes.OPEN_MINE_CELLS,
   };
@@ -43,7 +43,7 @@ export const changeGameState = (
 
 export const setGuessedValue = (
   cellPosition: CellPosition
-): ISetGuessedValue => {
+): ISetGuessedValueAction => {
   return {
     type: MinesweeperActionTypes.SET_GUESSED_VALUE,
     payload: cellPosition,
