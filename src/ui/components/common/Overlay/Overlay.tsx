@@ -15,11 +15,11 @@ const Overlay: FC<OverlayProps> = ({
 }): ReactElement => {
   return (
     <div
-      className="pause-overlay"
+      className="overlay"
       style={{ opacity: `${opacity}` }}
       onClick={clicked}
     >
-      <div className="pause-overlay__content">
+      <div className="big">
         <p>{content}</p>
       </div>
     </div>

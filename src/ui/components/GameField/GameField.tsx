@@ -1,54 +1,54 @@
 import { FC, ReactElement, useEffect } from 'react';
 import { connect } from 'react-redux';
-import PlayingCell from './PlayingCell/PlayingCell';
+import GameCell from './GameCell/GameCell';
 import MinesweeperField from '../../../utils/MinesweeperField';
 import {
   CellPosition,
   GameState,
   GameStates,
-  IPlayingCell,
+  IGameCell,
   MINE,
-  PlayFieldArray,
+  GameFieldArray,
 } from '../../../models/minesweeper';
 import {
   IAppState,
   IChangeGameStateAction,
-  ISavePlayingFieldToStoreAction,
+  ISaveGameFieldToStoreAction,
 } from '../../../models/store';
 import {
   changeGameState,
   openMineCells,
-  savePlayingFieldToStore,
+  saveGameFieldToStore,
   setGuessedValue,
 } from '../../../store/actions';
 import {
   countClosedCells,
-  deepClonePlayFieldArray,
+  deepCloneGameFieldArray,
   openSafeCells,
 } from '../../../utils/helpers';
 
-import './PlayField.scss';
+import './GameField.scss';
 
-interface PlayFieldProps {
-  playFieldProp: PlayFieldArray;
-  playFieldSize: number;
+interface GameFieldProps {
+  gameFieldProp: GameFieldArray;
+  gameFieldSize: number;
   gameState: GameState;
   minesLeft: number;
   setGuessedValue: ([x, y]: CellPosition) => void;
-  savePlayingFieldToStore: (
-    playField: PlayFieldArray,
+  saveGameFieldToStore: (
+    gameField: GameFieldArray,
     minesLeft: number
-  ) => ISavePlayingFieldToStoreAction;
+  ) => ISaveGameFieldToStoreAction;
   openMineCells: () => void;
   changeGameState: (gameState: GameState) => IChangeGameStateAction;
 }
 
-const PlayField: FC<PlayFieldProps | null> = ({
-  playFieldProp,
-  playFieldSize,
+const GameField: FC<GameFieldProps | null> = ({
+  gameFieldProp,
+  gameFieldSize,
   gameState,
   minesLeft,
-  savePlayingFieldToStore,
+  saveGameFieldToStore,
   changeGameState,
   openMineCells,
   setGuessedValue,
@@ -57,49 +57,49 @@ const PlayField: FC<PlayFieldProps | null> = ({
     if (gameState !== GameStates.NOT_STARTED) {
       return;
     }
-    const game = new MinesweeperField(playFieldSize);
-    const playField = game.completedPlayField;
-    savePlayingFieldToStore(playField, 10);
-  }, [gameState, playFieldSize, savePlayingFieldToStore]);
+    const game = new MinesweeperField(gameFieldSize);
+    const gameField = game.completedgameField;
+    saveGameFieldToStore(gameField, 10);
+  }, [gameState, gameFieldSize, saveGameFieldToStore]);
 
   const onCellLeftClick = ([x, y]: CellPosition): void => {
-    if (playFieldProp[x][y].value === MINE) {
+    if (gameFieldProp[x][y].value === MINE) {
       openMineCells();
       changeGameState(GameStates.LOST);
       return;
     }
 
-    let newPlayField: PlayFieldArray = deepClonePlayFieldArray(playFieldProp);
+    let newgameField: GameFieldArray = deepCloneGameFieldArray(gameFieldProp);
 
     if (gameState === GameStates.NOT_STARTED) {
       changeGameState(GameStates.IN_PROGRESS);
     }
 
-    newPlayField = openSafeCells([x, y], newPlayField, playFieldSize);
-    savePlayingFieldToStore(newPlayField, minesLeft);
+    newgameField = openSafeCells([x, y], newgameField, gameFieldSize);
+    saveGameFieldToStore(newgameField, minesLeft);
 
-    const closedCells = countClosedCells(newPlayField);
+    const closedCells = countClosedCells(newgameField);
 
-    if (closedCells === playFieldSize) {
+    if (closedCells === gameFieldSize) {
       changeGameState(GameStates.WON);
       openMineCells();
     }
   };
 
-  const playField = (
+  const gameField = (
     <div
-      className="play-field"
+      className="game-field"
       style={{
-        gridTemplateColumns: `repeat(${playFieldSize}, ${
-          320 / playFieldSize
+        gridTemplateColumns: `repeat(${gameFieldSize}, ${
+          320 / gameFieldSize
         }px)`,
-        gridTemplateRows: `repeat(${playFieldSize}, ${320 / playFieldSize}px)`,
+        gridTemplateRows: `repeat(${gameFieldSize}, ${320 / gameFieldSize}px)`,
       }}
     >
-      {playFieldProp && playFieldProp.length > 0
-        ? playFieldProp.map((rowEl: IPlayingCell[], rowElId: number) =>
-            rowEl.map((el: IPlayingCell, elId: number) => (
-              <PlayingCell
+      {gameFieldProp && gameFieldProp.length > 0
+        ? gameFieldProp.map((rowEl: IGameCell[], rowElId: number) =>
+            rowEl.map((el: IGameCell, elId: number) => (
+              <GameCell
                 key={rowElId.toString() + elId.toString()}
                 value={el.value}
                 opened={el.isOpened}
@@ -113,13 +113,13 @@ const PlayField: FC<PlayFieldProps | null> = ({
     </div>
   );
 
-  return <>{playField}</>;
+  return <>{gameField}</>;
 };
 
 const mapStateToProps = (state: IAppState) => {
   return {
-    playFieldProp: state.msw.playField,
-    playFieldSize: state.msw.playFieldSize,
+    gameFieldProp: state.msw.gameField,
+    gameFieldSize: state.msw.gameFieldSize,
     minesLeft: state.msw.minesLeft,
     gameState: state.msw.gameState,
   };
@@ -127,8 +127,8 @@ const mapStateToProps = (state: IAppState) => {
 
 const dispatchStateToProps = (dispatch: any) => {
   return {
-    savePlayingFieldToStore: (playField: PlayFieldArray, minesLeft: number) =>
-      dispatch(savePlayingFieldToStore(playField, minesLeft)),
+    saveGameFieldToStore: (gameField: GameFieldArray, minesLeft: number) =>
+      dispatch(saveGameFieldToStore(gameField, minesLeft)),
     changeGameState: (gameState: GameState) =>
       dispatch(changeGameState(gameState)),
     openMineCells: () => dispatch(openMineCells()),
@@ -137,4 +137,4 @@ const dispatchStateToProps = (dispatch: any) => {
   };
 };
 
-export default connect(mapStateToProps, dispatchStateToProps)(PlayField);
+export default connect(mapStateToProps, dispatchStateToProps)(GameField);

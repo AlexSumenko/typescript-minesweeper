@@ -1,9 +1,9 @@
 import {
   CellPosition,
   GuessedCellValue,
-  IPlayingCell,
+  IGameCell,
   MINE,
-  PlayFieldArray,
+  GameFieldArray,
   QUESTION_MARK,
 } from '../models/minesweeper';
 
@@ -15,30 +15,30 @@ export const timeFormatter = (value: number): string => {
   return `${formattedMinutes}:${formattedSeconds}`;
 };
 
-export const deepClonePlayFieldArray = (
-  playField: PlayFieldArray
-): PlayFieldArray => {
-  return playField.map((row: IPlayingCell[]): IPlayingCell[] =>
-    row.map((rowEl: IPlayingCell): IPlayingCell => {
+export const deepCloneGameFieldArray = (
+  gameField: GameFieldArray
+): GameFieldArray => {
+  return gameField.map((row: IGameCell[]): IGameCell[] =>
+    row.map((rowEl: IGameCell): IGameCell => {
       return { ...rowEl };
     })
   );
 };
 
-export const openMineCells = (playField: PlayFieldArray): PlayFieldArray => {
-  return playField.map((row: IPlayingCell[]): IPlayingCell[] =>
+export const openMineCells = (gameField: GameFieldArray): GameFieldArray => {
+  return gameField.map((row: IGameCell[]): IGameCell[] =>
     row.map(
-      (rowEl: IPlayingCell): IPlayingCell =>
+      (rowEl: IGameCell): IGameCell =>
         rowEl.value === MINE ? { ...rowEl, isOpened: true } : { ...rowEl }
     )
   );
 };
 
-export const countClosedCells = (playField: PlayFieldArray): number => {
-  return playField.reduce(
-    (totalCount: number, row: IPlayingCell[]) =>
+export const countClosedCells = (gameField: GameFieldArray): number => {
+  return gameField.reduce(
+    (totalCount: number, row: IGameCell[]) =>
       row.reduce(
-        (rowCount: number, rowEl: IPlayingCell) =>
+        (rowCount: number, rowEl: IGameCell) =>
           rowCount + Number(!rowEl.isOpened),
         0
       ) + totalCount,
@@ -64,85 +64,85 @@ export const handleGuessedValueChange = (
 
 export const openSafeCells = (
   [x, y]: CellPosition,
-  initialPlayField: PlayFieldArray,
-  playFieldSize: number
-): PlayFieldArray => {
-  const playField: PlayFieldArray = deepClonePlayFieldArray(initialPlayField);
+  initialgameField: GameFieldArray,
+  gameFieldSize: number
+): GameFieldArray => {
+  const gameField: GameFieldArray = deepCloneGameFieldArray(initialgameField);
 
-  const traversePlayField = ([x, y]: CellPosition): void => {
-    if (playField[x][y].isOpened) {
+  const traversegameField = ([x, y]: CellPosition): void => {
+    if (gameField[x][y].isOpened) {
       return;
     }
 
-    playField[x][y].isOpened = true;
+    gameField[x][y].isOpened = true;
 
-    if (playField[x][y].value !== null) {
+    if (gameField[x][y].value !== null) {
       return;
     }
 
     if (
       x !== 0 &&
       y !== 0 &&
-      playField[x - 1][y - 1].value !== MINE &&
-      !playField[x - 1][y - 1].isOpened
+      gameField[x - 1][y - 1].value !== MINE &&
+      !gameField[x - 1][y - 1].isOpened
     ) {
-      traversePlayField([x - 1, y - 1]);
+      traversegameField([x - 1, y - 1]);
     }
     if (
       x !== 0 &&
-      playField[x - 1][y].value !== MINE &&
-      !playField[x - 1][y].isOpened
+      gameField[x - 1][y].value !== MINE &&
+      !gameField[x - 1][y].isOpened
     ) {
-      traversePlayField([x - 1, y]);
+      traversegameField([x - 1, y]);
     }
     if (
       x !== 0 &&
-      y !== playFieldSize - 1 &&
-      playField[x - 1][y + 1].value !== MINE &&
-      !playField[x - 1][y + 1].isOpened
+      y !== gameFieldSize - 1 &&
+      gameField[x - 1][y + 1].value !== MINE &&
+      !gameField[x - 1][y + 1].isOpened
     ) {
-      traversePlayField([x - 1, y + 1]);
+      traversegameField([x - 1, y + 1]);
     }
     if (
       y !== 0 &&
-      playField[x][y - 1].value !== MINE &&
-      !playField[x][y - 1].isOpened
+      gameField[x][y - 1].value !== MINE &&
+      !gameField[x][y - 1].isOpened
     ) {
-      traversePlayField([x, y - 1]);
+      traversegameField([x, y - 1]);
     }
     if (
-      y !== playFieldSize - 1 &&
-      playField[x][y + 1].value !== MINE &&
-      !playField[x][y + 1].isOpened
+      y !== gameFieldSize - 1 &&
+      gameField[x][y + 1].value !== MINE &&
+      !gameField[x][y + 1].isOpened
     ) {
-      traversePlayField([x, y + 1]);
+      traversegameField([x, y + 1]);
     }
     if (
-      x !== playFieldSize - 1 &&
+      x !== gameFieldSize - 1 &&
       y !== 0 &&
-      playField[x + 1][y - 1].value !== MINE &&
-      !playField[x + 1][y - 1].isOpened
+      gameField[x + 1][y - 1].value !== MINE &&
+      !gameField[x + 1][y - 1].isOpened
     ) {
-      traversePlayField([x + 1, y - 1]);
+      traversegameField([x + 1, y - 1]);
     }
     if (
-      x !== playFieldSize - 1 &&
-      playField[x + 1][y].value !== MINE &&
-      !playField[x + 1][y].isOpened
+      x !== gameFieldSize - 1 &&
+      gameField[x + 1][y].value !== MINE &&
+      !gameField[x + 1][y].isOpened
     ) {
-      traversePlayField([x + 1, y]);
+      traversegameField([x + 1, y]);
     }
     if (
-      x !== playFieldSize - 1 &&
-      y !== playFieldSize - 1 &&
-      playField[x + 1][y + 1].value !== MINE &&
-      !playField[x + 1][y + 1].isOpened
+      x !== gameFieldSize - 1 &&
+      y !== gameFieldSize - 1 &&
+      gameField[x + 1][y + 1].value !== MINE &&
+      !gameField[x + 1][y + 1].isOpened
     ) {
-      traversePlayField([x + 1, y + 1]);
+      traversegameField([x + 1, y + 1]);
     }
   };
 
-  traversePlayField([x, y]);
+  traversegameField([x, y]);
 
-  return playField;
+  return gameField;
 };

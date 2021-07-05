@@ -2,6 +2,8 @@ export {
   changeGameState,
   setCellOpen,
   openMineCells,
-  savePlayingFieldToStore,
+  saveGameFieldToStore,
   setGuessedValue,
 } from './minesweeper';
+
+export { toggleLanguage } from './language';

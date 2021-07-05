@@ -6,13 +6,8 @@
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  font-size: 2rem;
   outline: none;
   border: none;
   background-color: white;
   cursor: pointer;
-
-  &__play-pause {
-    padding-bottom: 0.6rem;
-  }
 }

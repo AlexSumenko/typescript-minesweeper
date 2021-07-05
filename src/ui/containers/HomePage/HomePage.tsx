@@ -11,9 +11,9 @@ const HomePage: FC = (): ReactElement => {
         <MenuItem heading="Start game" />
       </Link>
       <Link to={Routes.LEADER_BOARD}>
-        <MenuItem heading="Leaderboard" />
+        <MenuItem heading="Leaderboard (in progress)" />
       </Link>
-      <MenuItem heading="Language" />
+      <MenuItem heading="Language (in progress)" />
     </>
   );
 };

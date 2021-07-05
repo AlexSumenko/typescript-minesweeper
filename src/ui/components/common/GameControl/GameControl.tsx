@@ -12,8 +12,8 @@ const GameControl: FC<GameControlProps> = ({
   clicked,
 }): ReactElement => {
   return (
-    <button className="game-board__game-control" onClick={clicked}>
-      <span className="game-board__game-control__play-pause">{value}</span>
+    <button className="game-board__game-control big" onClick={clicked}>
+      <span>{value}</span>
     </button>
   );
 };

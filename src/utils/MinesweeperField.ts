@@ -1,33 +1,33 @@
-import { IPlayingCell, MINE, PlayFieldArray } from '../models/minesweeper';
+import { IGameCell, MINE, GameFieldArray } from '../models/minesweeper';
 import { CellPosition } from '../models/minesweeper';
 
 class MinesweeperField {
-  private playField: PlayFieldArray = [];
+  private gameField: GameFieldArray = [];
   private minePositions: CellPosition[] = [];
-  private playFieldSize: number;
+  private gameFieldSize: number;
 
-  constructor(playFieldSize: number) {
-    this.playFieldSize = playFieldSize;
-    this.constructPlayField();
+  constructor(gameFieldSize: number) {
+    this.gameFieldSize = gameFieldSize;
+    this.constructgameField();
   }
 
-  get completedPlayField() {
-    return this.playField;
+  get completedgameField() {
+    return this.gameField;
   }
 
-  private constructPlayField = (): void => {
-    this.generatePlayingFieldSkeleton();
+  private constructgameField = (): void => {
+    this.generateGameFieldSkeleton();
     this.generateMines();
     this.countAdjacentMines();
   };
 
-  private generatePlayingFieldSkeleton = (): void => {
-    for (let x = 0; x < this.playFieldSize; x++) {
-      let row: IPlayingCell[] = [];
-      for (let y = 0; y < this.playFieldSize; y++) {
+  private generateGameFieldSkeleton = (): void => {
+    for (let x = 0; x < this.gameFieldSize; x++) {
+      let row: IGameCell[] = [];
+      for (let y = 0; y < this.gameFieldSize; y++) {
         row.push({ value: null, isOpened: false, guessedValue: null });
       }
-      this.playField.push(row);
+      this.gameField.push(row);
       row = [];
     }
   };
@@ -38,14 +38,14 @@ class MinesweeperField {
     while (!this.isAllMinesGenerated()) {
       [x, y] = this.generateRandomPosition();
       if (!this.isExistingMinePosition([x, y])) {
-        this.playField[x][y].value = MINE;
+        this.gameField[x][y].value = MINE;
         this.minePositions.push([x, y]);
       }
     }
   };
 
   private isAllMinesGenerated = (): boolean => {
-    return this.minePositions.length === this.playFieldSize ? true : false;
+    return this.minePositions.length === this.gameFieldSize ? true : false;
   };
 
   private isExistingMinePosition = (minePosition: CellPosition): boolean => {
@@ -57,8 +57,8 @@ class MinesweeperField {
 
   private generateRandomPosition = (): CellPosition => {
     return [
-      Math.floor(Math.random() * this.playFieldSize),
-      Math.floor(Math.random() * this.playFieldSize),
+      Math.floor(Math.random() * this.gameFieldSize),
+      Math.floor(Math.random() * this.gameFieldSize),
     ];
   };
 
@@ -70,47 +70,47 @@ class MinesweeperField {
 
   private incrementAdjacentCounts = (minePosition: CellPosition): void => {
     const [x, y]: CellPosition = minePosition;
-    if (x !== 0 && y !== 0 && this.playField[x - 1][y - 1].value !== MINE) {
-      (this.playField[x - 1][y - 1].value as number)++;
+    if (x !== 0 && y !== 0 && this.gameField[x - 1][y - 1].value !== MINE) {
+      (this.gameField[x - 1][y - 1].value as number)++;
     }
-    if (x !== 0 && this.playField[x - 1][y].value !== MINE) {
-      (this.playField[x - 1][y].value as number)++;
+    if (x !== 0 && this.gameField[x - 1][y].value !== MINE) {
+      (this.gameField[x - 1][y].value as number)++;
     }
     if (
       x !== 0 &&
-      y !== this.playFieldSize - 1 &&
-      this.playField[x - 1][y + 1].value !== MINE
+      y !== this.gameFieldSize - 1 &&
+      this.gameField[x - 1][y + 1].value !== MINE
     ) {
-      (this.playField[x - 1][y + 1].value as number)++;
+      (this.gameField[x - 1][y + 1].value as number)++;
     }
-    if (y !== 0 && this.playField[x][y - 1].value !== MINE) {
-      (this.playField[x][y - 1].value as number)++;
+    if (y !== 0 && this.gameField[x][y - 1].value !== MINE) {
+      (this.gameField[x][y - 1].value as number)++;
     }
     if (
-      y !== this.playFieldSize - 1 &&
-      this.playField[x][y + 1].value !== MINE
+      y !== this.gameFieldSize - 1 &&
+      this.gameField[x][y + 1].value !== MINE
     ) {
-      (this.playField[x][y + 1].value as number)++;
+      (this.gameField[x][y + 1].value as number)++;
     }
     if (
-      x !== this.playFieldSize - 1 &&
+      x !== this.gameFieldSize - 1 &&
       y !== 0 &&
-      this.playField[x + 1][y - 1].value !== MINE
+      this.gameField[x + 1][y - 1].value !== MINE
     ) {
-      (this.playField[x + 1][y - 1].value as number)++;
+      (this.gameField[x + 1][y - 1].value as number)++;
     }
     if (
-      x !== this.playFieldSize - 1 &&
-      this.playField[x + 1][y].value !== MINE
+      x !== this.gameFieldSize - 1 &&
+      this.gameField[x + 1][y].value !== MINE
     ) {
-      (this.playField[x + 1][y].value as number)++;
+      (this.gameField[x + 1][y].value as number)++;
     }
     if (
-      x !== this.playFieldSize - 1 &&
-      y !== this.playFieldSize - 1 &&
-      this.playField[x + 1][y + 1].value !== MINE
+      x !== this.gameFieldSize - 1 &&
+      y !== this.gameFieldSize - 1 &&
+      this.gameField[x + 1][y + 1].value !== MINE
     ) {
-      (this.playField[x + 1][y + 1].value as number)++;
+      (this.gameField[x + 1][y + 1].value as number)++;
     }
   };
 }

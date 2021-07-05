@@ -1,4 +1,4 @@
-.pause-overlay {
+.overlay {
   position: absolute;
   top: -1px;
   left: -1px;
@@ -10,9 +10,4 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
-  &__content {
-    font-size: 2rem;
-    color: white;
-  }
 }

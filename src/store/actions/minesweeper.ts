@@ -1,34 +1,34 @@
 import {
-  ActionTypes,
-  ISavePlayingFieldToStoreAction,
+  MinesweeperActionTypes,
+  ISaveGameFieldToStoreAction,
   ISetCellOpenAction,
   IChangeGameStateAction,
   IOpenMineCells,
   ISetGuessedValue,
 } from '../../models/store';
-import { GameState, PlayFieldArray } from '../../models/minesweeper';
+import { GameState, GameFieldArray } from '../../models/minesweeper';
 import { CellPosition } from '../../models/minesweeper';
 
-export const savePlayingFieldToStore = (
-  playField: PlayFieldArray,
+export const saveGameFieldToStore = (
+  gameField: GameFieldArray,
   minesLeft: number
-): ISavePlayingFieldToStoreAction => {
+): ISaveGameFieldToStoreAction => {
   return {
-    type: ActionTypes.SAVE_PLAY_FIELD_TO_STORE,
-    payload: { playField, minesLeft },
+    type: MinesweeperActionTypes.SAVE_GAME_FIELD_TO_STORE,
+    payload: { gameField, minesLeft },
   };
 };
 
 export const setCellOpen = (cellPosition: CellPosition): ISetCellOpenAction => {
   return {
-    type: ActionTypes.SET_CELL_OPEN,
+    type: MinesweeperActionTypes.SET_CELL_OPEN,
     payload: cellPosition,
   };
 };
 
 export const openMineCells = (): IOpenMineCells => {
   return {
-    type: ActionTypes.OPEN_MINE_CELLS,
+    type: MinesweeperActionTypes.OPEN_MINE_CELLS,
   };
 };
 
@@ -36,7 +36,7 @@ export const changeGameState = (
   gameState: GameState
 ): IChangeGameStateAction => {
   return {
-    type: ActionTypes.CHANGE_GAME_STATE,
+    type: MinesweeperActionTypes.CHANGE_GAME_STATE,
     payload: gameState,
   };
 };
@@ -45,7 +45,7 @@ export const setGuessedValue = (
   cellPosition: CellPosition
 ): ISetGuessedValue => {
   return {
-    type: ActionTypes.SET_GUESSED_VALUE,
+    type: MinesweeperActionTypes.SET_GUESSED_VALUE,
     payload: cellPosition,
   };
 };

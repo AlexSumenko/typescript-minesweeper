@@ -2,20 +2,20 @@ import { FC, ReactElement, useEffect, useRef } from 'react';
 import {
   GuessedCellValue,
   MINE,
-  PlayingCellValue,
+  GameCellValue,
 } from '../../../../models/minesweeper';
 
-import './PlayingCell.scss';
+import './GameCell.scss';
 
-interface PlayingCellProps {
-  value: PlayingCellValue;
+interface GameCellProps {
+  value: GameCellValue;
   guessedValue: GuessedCellValue;
   opened: boolean;
   leftClicked: () => void;
   rightClicked: () => void;
 }
 
-const PlayingCell: FC<PlayingCellProps> = ({
+const GameCell: FC<GameCellProps> = ({
   value,
   guessedValue,
   opened,
@@ -59,7 +59,7 @@ const PlayingCell: FC<PlayingCellProps> = ({
 
   return (
     <div
-      className="playing-cell"
+      className="game-cell"
       style={{
         boxShadow: `${opened ? openedShadow : closedShadow}`,
         backgroundColor: `${opened && value === MINE ? 'red' : 'white'}`,
@@ -82,4 +82,4 @@ const PlayingCell: FC<PlayingCellProps> = ({
   );
 };
 
-export default PlayingCell;
+export default GameCell;

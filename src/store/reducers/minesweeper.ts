@@ -1,65 +1,65 @@
 import {
   CellPosition,
   GameStates,
-  PlayFieldArray,
+  GameFieldArray,
 } from '../../models/minesweeper';
 import {
-  ActionTypes,
+  MinesweeperActionTypes,
   MinesweeperActions,
-  IPlayFieldState,
+  IgameFieldState,
 } from '../../models/store';
 import {
-  deepClonePlayFieldArray,
+  deepCloneGameFieldArray,
   handleGuessedValueChange,
   openMineCells,
 } from '../../utils/helpers';
 
-const initialState: IPlayFieldState = {
-  playField: [],
-  playFieldSize: 10,
+const initialState: IgameFieldState = {
+  gameField: [],
+  gameFieldSize: 10,
   minesLeft: 0,
   gameState: GameStates.NOT_STARTED,
 };
 
 const reducer = (
-  state: IPlayFieldState = initialState,
+  state: IgameFieldState = initialState,
   action: MinesweeperActions
-): IPlayFieldState => {
+): IgameFieldState => {
   switch (action.type) {
-    case ActionTypes.SAVE_PLAY_FIELD_TO_STORE:
+    case MinesweeperActionTypes.SAVE_GAME_FIELD_TO_STORE:
       return {
         ...state,
-        playField: action.payload.playField,
+        gameField: action.payload.gameField,
         minesLeft: action.payload.minesLeft,
       };
-    case ActionTypes.SET_CELL_OPEN:
+    case MinesweeperActionTypes.SET_CELL_OPEN:
       const [openX, openY]: CellPosition = action.payload;
-      const newPlayField: PlayFieldArray = deepClonePlayFieldArray(
-        state.playField
+      const newgameField: GameFieldArray = deepCloneGameFieldArray(
+        state.gameField
       );
-      newPlayField[openX][openY].isOpened = true;
-      return { ...state, playField: newPlayField };
-    case ActionTypes.OPEN_MINE_CELLS:
-      const playFieldWithOpenMines: PlayFieldArray = openMineCells(
-        state.playField
+      newgameField[openX][openY].isOpened = true;
+      return { ...state, gameField: newgameField };
+    case MinesweeperActionTypes.OPEN_MINE_CELLS:
+      const gameFieldWithOpenMines: GameFieldArray = openMineCells(
+        state.gameField
       );
-      return { ...state, playField: playFieldWithOpenMines };
-    case ActionTypes.CHANGE_GAME_STATE:
+      return { ...state, gameField: gameFieldWithOpenMines };
+    case MinesweeperActionTypes.CHANGE_GAME_STATE:
       return { ...state, gameState: action.payload };
-    case ActionTypes.SET_GUESSED_VALUE:
+    case MinesweeperActionTypes.SET_GUESSED_VALUE:
       const [x, y]: CellPosition = action.payload;
       let newMinesLeft: number = 0;
-      const playFieldWithGuessedValue: PlayFieldArray = deepClonePlayFieldArray(
-        state.playField
+      const gameFieldWithGuessedValue: GameFieldArray = deepCloneGameFieldArray(
+        state.gameField
       );
-      [playFieldWithGuessedValue[x][y].guessedValue, newMinesLeft] =
+      [gameFieldWithGuessedValue[x][y].guessedValue, newMinesLeft] =
         handleGuessedValueChange(
-          playFieldWithGuessedValue[x][y].guessedValue,
+          gameFieldWithGuessedValue[x][y].guessedValue,
           state.minesLeft
         );
       return {
         ...state,
-        playField: playFieldWithGuessedValue,
+        gameField: gameFieldWithGuessedValue,
         minesLeft: newMinesLeft,
       };
     default:

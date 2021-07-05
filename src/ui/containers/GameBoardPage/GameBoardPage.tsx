@@ -1,7 +1,7 @@
 import { FC, ReactElement, useEffect } from 'react';
 import { connect } from 'react-redux';
 import GameControlsBar from '../../components/GameControlsBar/GameControlsBar';
-import PlayField from '../../components/PlayField/PlayField';
+import GameField from '../../components/GameField/GameField';
 import { changeGameState } from '../../../store/actions';
 import { GameState, GameStates } from '../../../models/minesweeper';
 import { IChangeGameStateAction } from '../../../models/store';
@@ -24,8 +24,8 @@ const GameBoardPage: FC<GameBoardPageProps> = ({
     <>
       <div className="game-board">
         <GameControlsBar />
-        <div className="play-container">
-          <PlayField />
+        <div className="game-container">
+          <GameField />
         </div>
       </div>
       <p>HINT! Use right mouse button to mark mines or potential mines</p>

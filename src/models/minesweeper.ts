@@ -20,27 +20,17 @@ export enum Locales {
   RU = 'RU',
 }
 
-export type PlayingCellValue =
-  | null
-  | 1
-  | 2
-  | 3
-  | 4
-  | 5
-  | 6
-  | 7
-  | 8
-  | typeof MINE;
+export type GameCellValue = null | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | typeof MINE;
 
 export type GuessedCellValue = null | typeof MINE | typeof QUESTION_MARK;
 
-export interface IPlayingCell {
-  value: PlayingCellValue;
+export interface IGameCell {
+  value: GameCellValue;
   guessedValue: GuessedCellValue;
   isOpened: boolean;
 }
 
-export type PlayFieldArray = IPlayingCell[][];
+export type GameFieldArray = IGameCell[][];
 
 export type CellPosition = [number, number];
 

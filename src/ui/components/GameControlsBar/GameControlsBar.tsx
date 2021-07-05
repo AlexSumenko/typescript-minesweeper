@@ -73,14 +73,14 @@ const GameControlsBar: FC<GameControlsBarProps> = ({
         />
       )}
       <div className="controls-bar">
-        <div className="controls-bar__mines-left">
+        <div className="controls-bar__counter">
           <Counter value={minesLeft} heading="Mines left:" />
         </div>
         <div className="controls-bar__game-controls">
           <GameControl value={'\u23EF'} clicked={onGamePlayPauseClick} />
           <GameControl value={'\u21BA'} clicked={onRestartClick} />
         </div>
-        <div className="controls-bar__timer">
+        <div className="controls-bar__counter">
           <Counter value={timeFormatter(clock)} heading="Time spent:" />
         </div>
       </div>
